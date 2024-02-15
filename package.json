@@ -1,0 +1,16 @@
+{
+    "name": "com.waltergordy.puzzleforge",
+    "displayName": "Puzzle Forge",
+    "version": "1.0.0",
+    "unity": "2020.3", 
+    "description": "Helping rig rooms together.",
+    "keywords": ["unity"],
+    "author": {
+      "name": "Walter Gordy",
+      "email": "walter.gordy+puzzleforge@gmail.com",
+      "url": "https://waltergordy.com"
+    },
+    "license": "MIT", // Or your chosen license
+    "dependencies": {
+    }
+  }
