@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEditor;
+using System;
+using System.Collections.Generic;
 
 namespace PuzzleForge
 {
@@ -15,7 +17,7 @@ namespace PuzzleForge
 
         PuzzleForgeController switchController;
 
-        private void DrawCurve(Vector3 pos1, Vector3 pos2, Color color, float curveRatio)
+        private void DrawCurve(Vector3 pos1, Vector3 pos2, Color color, float curveRatio, int width=1)
         {
             Vector3 start = pos1;
 
@@ -30,7 +32,7 @@ namespace PuzzleForge
                 end + Vector3.up * offset,
                 color,
                 EditorGUIUtility.whiteTexture,
-                2
+                width
             );
         }
 
@@ -60,16 +62,44 @@ namespace PuzzleForge
             // Drawing curves to reactors and activators, assuming these methods are correctly implemented
             foreach (PuzzleForgeReactor reactor in switchController.objectsToActivate)
             {
-                DrawCurve(switchController.transform.position, reactor.transform.position, Color.blue, 0.85f);
+                DrawCurve(switchController.transform.position, reactor.transform.position, Color.gray, 0.85f);
             }
 
             foreach (PuzzleForgeActivator activator in switchController.objectsWhichActivate)
             {
-                DrawCurve(switchController.transform.position, activator.transform.position, Color.red, 0.7f);
+                DrawCurve(switchController.transform.position, activator.transform.position, Color.gray, 0.7f);
             }
+
+
+            // Drawing curves to reactors and activators, assuming these methods are correctly implemented
+            foreach (PuzzleForgeReactor reactor in switchController.objectsToActivate)
+            {
+                List<PuzzleForgeActivator> activators = GetActivators(reactor);
+                foreach(PuzzleForgeActivator activator in activators)
+                {
+                    DrawCurve(activator.transform.position, reactor.transform.position, Color.red, 0.85f, 3);
+                }
+            }
+
         }
 
+        private List<PuzzleForgeActivator> GetActivators(PuzzleForgeReactor reactor)
+        {
+            List<PuzzleForgeActivator> activators  = new List<PuzzleForgeActivator>();
 
+            PuzzleForgeActivator[] a = switchController.GetActivators();
+
+            ulong activationMask = reactor.disableMask | reactor.enableMask;
+
+            foreach (PuzzleForgeActivator activator in a) { 
+                if((activator.actionLayer & activationMask) > 0)
+                    activators.Add(activator);
+            }
+
+
+
+            return activators;
+        }
 
         public override void OnInspectorGUI()
         {

@@ -15,7 +15,7 @@ namespace PuzzleForge
 		[HideInInspector]
 		public ulong actionLayer = 0;
 		public bool latching = false;
-        [HideInInspector]
+        [HideInInspector] // has custom inspector
         public bool sendDisable = false;
 		public bool mouseClickDebug = false;
 		public bool keyboardDebug = false;
