@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.Events;
+using System.Collections.Generic;
 
 namespace PuzzleForge
 {
@@ -14,6 +15,7 @@ namespace PuzzleForge
 		bool isEnabled;
 		public bool overrideSpeed = false;
 		public float animationSpeed = 1;
+		public bool initializeActive = true;
 
 		public bool oneShot = false;
 		bool hasLatched = false;
@@ -58,9 +60,10 @@ namespace PuzzleForge
 
 		void Start()
 		{
-
-
-			Deactivate(0);
+			if (initializeActive)
+				Activate(0);
+			else
+				Deactivate(0);
 		}
 
 		public bool isActivated()

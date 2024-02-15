@@ -38,6 +38,7 @@ namespace PuzzleForge
 
         public void Enable(ulong actionMask)
         {
+            Debug.Log($"Enable recived for layer {actionMask}");
             foreach (var activatable in activatables)
             {
                 activatable.Activate(actionMask);
@@ -46,6 +47,7 @@ namespace PuzzleForge
 
         public void Disable(ulong actionMask)
         {
+            Debug.Log($"Disable recived for layer {actionMask}");
             foreach (var activatable in activatables)
             {
                 activatable.Deactivate(actionMask);
