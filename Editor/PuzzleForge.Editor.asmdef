@@ -1,0 +1,16 @@
+{
+    "name": "PuzzleForge.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6c5b811cafb1aa241b67b9ac4bbd953c"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
