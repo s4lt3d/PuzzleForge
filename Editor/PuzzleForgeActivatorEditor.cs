@@ -10,6 +10,16 @@ namespace PuzzleForge
         {
             PuzzleForgeActivator activator = (PuzzleForgeActivator)target;
 
+            int selectedIndex = activator.sendDisable ? 1 : 0;
+            string[] options = new string[] { "Send Activate", "Send Deactivate" };
+            selectedIndex = EditorGUILayout.Popup("On Interaction", selectedIndex, options);
+            activator.sendDisable = selectedIndex == 1;
+
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(target);
+            }
+
             DrawDefaultInspector();
 
             if (GUILayout.Button("Test Enable"))

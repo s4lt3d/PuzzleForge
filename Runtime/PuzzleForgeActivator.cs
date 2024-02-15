@@ -15,7 +15,8 @@ namespace PuzzleForge
 		[HideInInspector]
 		public int actionLayer = 0;
 		public bool latching = false;
-		public bool invert = false;
+        [HideInInspector]
+        public bool sendDisable = false;
 		public bool mouseClickDebug = false;
 		public bool keyboardDebug = false;
 		bool mouseState = false;
@@ -106,7 +107,7 @@ namespace PuzzleForge
 				return;
 			latched = true;
 
-			if (invert == false)
+			if (sendDisable == false)
 				switchController.Enable(actionLayer);
 			else
 				switchController.Disable(actionLayer);
@@ -123,7 +124,7 @@ namespace PuzzleForge
 			if (latched && latching)
 				return;
 
-			if (invert == true)
+			if (sendDisable == true)
 				switchController.Enable(actionLayer);
 			else
 				switchController.Disable(actionLayer);
