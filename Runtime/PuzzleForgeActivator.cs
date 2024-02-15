@@ -8,12 +8,12 @@ namespace PuzzleForge
 		public int actionLayer = 0;
 	}
 
-	public class PuzzleForgeActivator : MonoBehaviour
+	public class PuzzleForgeActivator : MonoBehaviour, IPuzzleForgeActivator
 	{
 		PuzzleForgeController switchController;
 
 		[HideInInspector]
-		public ulong actionLayer = 0;
+		public ulong activationID = 0; // single hot format
 		public bool latching = false;
         [HideInInspector] // has custom inspector
         public bool sendDisable = false;
@@ -38,11 +38,11 @@ namespace PuzzleForge
 
 			switchController = FindSwitchController(transform.parent);
 		}
+
 		int depthCount = 0;
 
 		PuzzleForgeController FindSwitchController(Transform obj)
 		{
-
 			PuzzleForgeController sc;
 
 			if (obj == null)
@@ -50,7 +50,9 @@ namespace PuzzleForge
 
 			depthCount++;
 			if (depthCount > 10)
+			{
 				return null;
+			}
 			sc = obj.GetComponent<PuzzleForgeController>();
 			if (sc == null)
 				sc = FindSwitchController(obj.parent);
@@ -108,9 +110,9 @@ namespace PuzzleForge
 			latched = true;
 
 			if (sendDisable == false)
-				switchController.Enable(actionLayer);
+				switchController.Enable(activationID);
 			else
-				switchController.Disable(actionLayer);
+				switchController.Disable(activationID);
 		}
 
 		public void Disable()
@@ -125,24 +127,23 @@ namespace PuzzleForge
 				return;
 
 			if (sendDisable == true)
-				switchController.Enable(actionLayer);
+				switchController.Enable(activationID);
 			else
-				switchController.Disable(actionLayer);
+				switchController.Disable(activationID);
 		}
 
 		void OnTriggerEnter2D(Collider2D other)
 		{
-			TrigerEnter(other);
+			StartInteraction(other);
 		}
-
 
 		void OnTriggerEnter(Collider other)
 		{
-			TrigerEnter(other);
+			StartInteraction(other);
 
 		}
 
-		void TrigerEnter(Component other)
+		public void StartInteraction(Component other)
 		{
 			if (tagRequired.Contains(other.tag))
 			{
@@ -172,15 +173,15 @@ namespace PuzzleForge
 
 		void OnTriggerExit(Collider other)
 		{
-			TriggerExit(other);
+			StopInteraction(other);
 		}
 
 		private void OnTriggerExit2D(Collider2D other)
 		{
-			TriggerExit(other);
+			StopInteraction(other);
 		}
 
-		void TriggerExit(Component other)
+		public void StopInteraction(Component other)
 		{
 			if (tagRequired.Contains(other.tag))
 			{

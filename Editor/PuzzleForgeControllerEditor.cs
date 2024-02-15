@@ -80,7 +80,6 @@ namespace PuzzleForge
                     DrawCurve(activator.transform.position, reactor.transform.position, Color.red, 0.85f, 3);
                 }
             }
-
         }
 
         private List<PuzzleForgeActivator> GetActivators(PuzzleForgeReactor reactor)
@@ -92,7 +91,7 @@ namespace PuzzleForge
             ulong activationMask = reactor.disableMask | reactor.enableMask;
 
             foreach (PuzzleForgeActivator activator in a) { 
-                if((activator.actionLayer & activationMask) > 0)
+                if((activator.activationID & activationMask) > 0)
                     activators.Add(activator);
             }
 
@@ -181,7 +180,7 @@ namespace PuzzleForge
 
             for (int j = 0; j < activators.Length; j++)
             {
-                activators[j].actionLayer = (ulong)1 << j;
+                activators[j].activationID = (ulong)1 << j;
                 EditorUtility.SetDirty(activators[j]);
             }
         }

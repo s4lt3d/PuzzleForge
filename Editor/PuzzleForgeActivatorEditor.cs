@@ -12,7 +12,7 @@ namespace PuzzleForge
 
             int selectedIndex = activator.sendDisable ? 1 : 0;
             string[] options = new string[] { "Send Activate", "Send Deactivate" };
-            selectedIndex = EditorGUILayout.Popup("On Interaction", selectedIndex, options);
+            selectedIndex = EditorGUILayout.Popup("On Start Interaction", selectedIndex, options);
             activator.sendDisable = selectedIndex == 1;
 
             if (GUI.changed)
