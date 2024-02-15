@@ -130,18 +130,18 @@ namespace PuzzleForge
         {
             for (int i = 0; i < reactors.Length; i++)
             {
-                int activationMask = 0;
-                int deactivationMask = 0;
+                ulong activationMask = 0;
+                ulong deactivationMask = 0;
 
                 for (int j = 0; j < activators.Length; j++)
                 {
                     if (enableFieldsArray[i, j] == true)
                     {
-                        activationMask |= 1 << j;
+                        activationMask |= (ulong)1 << j;
                     }
                     if (disableFieldsArray[i, j] == true)
                     {
-                        deactivationMask |= 1 << j;
+                        deactivationMask |= (ulong)1 << j;
                     }
                 }
                 reactors[i].enableMask = activationMask;
@@ -151,7 +151,7 @@ namespace PuzzleForge
 
             for (int j = 0; j < activators.Length; j++)
             {
-                activators[j].actionLayer = 1 << j;
+                activators[j].actionLayer = (ulong)1 << j;
                 EditorUtility.SetDirty(activators[j]);
             }
         }
@@ -165,14 +165,14 @@ namespace PuzzleForge
             {
                 for (int j = 0; j < activators.Length; j++)
                 {
-                    if ((reactors[i].enableMask & (1 << j)) > 0)
+                    if ((reactors[i].enableMask & ((ulong)1 << j)) > 0)
                     {
                         enableFieldsArray[i, j] = true;
                     }
                     else
                         enableFieldsArray[i, j] = false;
 
-                    if ((reactors[i].disableMask & (1 << j)) > 0)
+                    if ((reactors[i].disableMask & ((ulong)1 << j)) > 0)
                     {
                         disableFieldsArray[i, j] = true;
                     }

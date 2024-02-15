@@ -20,9 +20,9 @@ namespace PuzzleForge
 		public bool anyActivator = false;
 
 		[SerializeField]
-		public int enableMask = 0;
+		public ulong enableMask = 0;
 		[SerializeField]
-		public int disableMask = 0;
+		public ulong disableMask = 0;
 
 		public float AnimationEnableDelay = 0.0f;
 		public float AnimationDisableDelay = 0.0f;
@@ -30,8 +30,8 @@ namespace PuzzleForge
 		string animatorControllerName = "";
 		public Animator anim;
 
-		protected int enableMaskRegister = 0;
-		protected int disableMaskRegister = 0;
+		protected ulong enableMaskRegister = 0;
+		protected ulong disableMaskRegister = 0;
 
 		public bool toggle = false;
 
@@ -69,7 +69,7 @@ namespace PuzzleForge
 
 		}
 
-		bool serviceEnableMask(int incomingMask)
+		bool serviceEnableMask(ulong incomingMask)
 		{
 			enableMaskRegister |= incomingMask;
 			disableMaskRegister &= ~incomingMask;
@@ -83,7 +83,7 @@ namespace PuzzleForge
 			return true;
 		}
 
-		bool serviceDisableMask(int incomingMask)
+		bool serviceDisableMask(ulong incomingMask)
 		{
 			disableMaskRegister |= incomingMask;
 			enableMaskRegister &= ~incomingMask;
@@ -176,7 +176,7 @@ namespace PuzzleForge
 		}
 
 
-		public void Activate(int incomingMask)
+		public void Activate(ulong incomingMask)
 		{
 			if (oneShot && hasLatched)
 				return;
@@ -197,7 +197,7 @@ namespace PuzzleForge
 			}
 		}
 
-		public void Deactivate(int incomingMask)
+		public void Deactivate(ulong incomingMask)
 		{
 			if (oneShot && hasLatched)
 				return;

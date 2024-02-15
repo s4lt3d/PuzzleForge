@@ -2,8 +2,8 @@
 {
     interface IPuzzleForgeActivatable
     {
-        void Activate(int incomingMask);
-        void Deactivate(int incomingMask);
+        void Activate(ulong incomingMask);
+        void Deactivate(ulong incomingMask);
     }
 }
 

@@ -13,7 +13,7 @@ namespace PuzzleForge
 		PuzzleForgeController switchController;
 
 		[HideInInspector]
-		public int actionLayer = 0;
+		public ulong actionLayer = 0;
 		public bool latching = false;
         [HideInInspector]
         public bool sendDisable = false;

@@ -36,7 +36,7 @@ namespace PuzzleForge
             return objectsWhichActivate;
         }
 
-        public void Enable(int actionMask)
+        public void Enable(ulong actionMask)
         {
             foreach (var activatable in activatables)
             {
@@ -44,7 +44,7 @@ namespace PuzzleForge
             }
         }
 
-        public void Disable(int actionMask)
+        public void Disable(ulong actionMask)
         {
             foreach (var activatable in activatables)
             {
