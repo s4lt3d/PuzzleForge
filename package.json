@@ -1,16 +1,24 @@
 {
-    "name": "com.waltergordy.puzzleforge",
-    "displayName": "Puzzle Forge",
-    "version": "1.0.0",
-    "unity": "2020.3", 
-    "description": "Helping rig rooms together.",
-    "keywords": ["unity"],
-    "author": {
-      "name": "Walter Gordy",
-      "email": "walter.gordy+puzzleforge@gmail.com",
-      "url": "https://waltergordy.com"
-    },
-    "license": "MIT", // Or your chosen license
-    "dependencies": {
-    }
+  "name": "com.waltergordy.puzzleforge",
+  "version": "1.0.0",
+  "displayName": "Puzzle Forge",
+  "description": "Helping Rig Rooms",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "dependencies": {
+
+ },
+ "keywords": [
+    "puzzle",
+    "room",
+    "rigging"
+  ],
+  "author": {
+    "name": "Walter Gordy",
+    "email": "walter.gordy@gmail.com",
+    "url": "https://waltergordy.com"
   }
+}
