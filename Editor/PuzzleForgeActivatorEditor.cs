@@ -3,17 +3,17 @@ using UnityEditor;
 
 namespace PuzzleForge
 {
-    [CustomEditor(typeof(PuzzleForgeActivator))]
+    [CustomEditor(typeof(PuzzleForgeTriggerSource))]
     public class PuzzleForgeActivatorEditor : Editor
     {
         override public void OnInspectorGUI()
         {
-            PuzzleForgeActivator activator = (PuzzleForgeActivator)target;
+            PuzzleForgeTriggerSource triggerSource = (PuzzleForgeTriggerSource)target;
 
-            int selectedIndex = activator.sendDisable ? 1 : 0;
+            int selectedIndex = triggerSource.sendDisable ? 1 : 0;
             string[] options = new string[] { "Send Activate", "Send Deactivate" };
             selectedIndex = EditorGUILayout.Popup("On Start Interaction", selectedIndex, options);
-            activator.sendDisable = selectedIndex == 1;
+            triggerSource.sendDisable = selectedIndex == 1;
 
             if (GUI.changed)
             {
@@ -24,12 +24,12 @@ namespace PuzzleForge
 
             if (GUILayout.Button("Test Enable"))
             {
-                activator.Enable();
+                triggerSource.Enable();
             }
 
             if (GUILayout.Button("Test Disable"))
             {
-                activator.Disable();
+                triggerSource.Disable();
             }
         }
     }

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-	public class PuzzleForgeReactor : MonoBehaviour, IPuzzleForgeActivatable
+	public class PuzzleForgeReactor : MonoBehaviour, IPuzzleForgeTriggerable
 	{
 
 		// Get animators for all children

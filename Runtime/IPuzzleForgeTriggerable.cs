@@ -1,6 +1,6 @@
 ﻿namespace PuzzleForge
 {
-    interface IPuzzleForgeActivatable
+    interface IPuzzleForgeTriggerable
     {
         void Activate(ulong incomingMask);
         void Deactivate(ulong incomingMask);

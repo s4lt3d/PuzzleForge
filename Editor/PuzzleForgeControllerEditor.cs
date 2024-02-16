@@ -5,17 +5,17 @@ using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-    [CustomEditor(typeof(PuzzleForgeController))]
+    [CustomEditor(typeof(PuzzleForgeRoomController))]
     public class PuzzleForgeControllerEditor : Editor
     {
-        private PuzzleForgeController selectedObject;
+        private PuzzleForgeRoomController selectedObject;
         bool[,] enableFieldsArray = new bool[4, 4];
         bool[,] disableFieldsArray = new bool[4, 4];
         PuzzleForgeReactor[] reactors;
-        PuzzleForgeActivator[] activators;
+        PuzzleForgeTriggerSource[] activators;
         GameObject selected = null;
 
-        PuzzleForgeController switchController;
+        PuzzleForgeRoomController switchRoomController;
 
         private void DrawCurve(Vector3 pos1, Vector3 pos2, Color color, float curveRatio, int width=1)
         {
@@ -39,9 +39,9 @@ namespace PuzzleForge
         public void OnEnable()
         {
             if (target != null)
-                selectedObject = target as PuzzleForgeController;
+                selectedObject = target as PuzzleForgeRoomController;
             reactors = selectedObject.GetReactors();
-            activators = selectedObject.GetActivators();
+            activators = selectedObject.GetTriggers();
             GetActivationMasks();
         }
 
@@ -53,44 +53,44 @@ namespace PuzzleForge
                 Handles.Label(selected.transform.position + Vector3.up * 2, selected.name);
 
 
-            switchController = target as PuzzleForgeController;
-            if (switchController == null) return;
+            switchRoomController = target as PuzzleForgeRoomController;
+            if (switchRoomController == null) return;
 
             // Example drawing a wire cube around the SwitchController object
-            Handles.DrawWireCube(switchController.transform.position, Vector3.one * 1.5f);
+            Handles.DrawWireCube(switchRoomController.transform.position, Vector3.one * 1.5f);
 
             // Drawing curves to reactors and activators, assuming these methods are correctly implemented
-            foreach (PuzzleForgeReactor reactor in switchController.objectsToActivate)
+            foreach (PuzzleForgeReactor reactor in switchRoomController.objectsToTrigger)
             {
-                DrawCurve(switchController.transform.position, reactor.transform.position, Color.gray, 0.85f);
+                DrawCurve(switchRoomController.transform.position, reactor.transform.position, Color.gray, 0.85f);
             }
 
-            foreach (PuzzleForgeActivator activator in switchController.objectsWhichActivate)
+            foreach (PuzzleForgeTriggerSource activator in switchRoomController.objectsWhichReact)
             {
-                DrawCurve(switchController.transform.position, activator.transform.position, Color.gray, 0.7f);
+                DrawCurve(switchRoomController.transform.position, activator.transform.position, Color.gray, 0.7f);
             }
 
 
             // Drawing curves to reactors and activators, assuming these methods are correctly implemented
-            foreach (PuzzleForgeReactor reactor in switchController.objectsToActivate)
+            foreach (PuzzleForgeReactor reactor in switchRoomController.objectsToTrigger)
             {
-                List<PuzzleForgeActivator> activators = GetActivators(reactor);
-                foreach(PuzzleForgeActivator activator in activators)
+                List<PuzzleForgeTriggerSource> activators = GetActivators(reactor);
+                foreach(PuzzleForgeTriggerSource activator in activators)
                 {
                     DrawCurve(activator.transform.position, reactor.transform.position, Color.red, 0.85f, 3);
                 }
             }
         }
 
-        private List<PuzzleForgeActivator> GetActivators(PuzzleForgeReactor reactor)
+        private List<PuzzleForgeTriggerSource> GetActivators(PuzzleForgeReactor reactor)
         {
-            List<PuzzleForgeActivator> activators  = new List<PuzzleForgeActivator>();
+            List<PuzzleForgeTriggerSource> activators  = new List<PuzzleForgeTriggerSource>();
 
-            PuzzleForgeActivator[] a = switchController.GetActivators();
+            PuzzleForgeTriggerSource[] a = switchRoomController.GetTriggers();
 
             ulong activationMask = reactor.disableMask | reactor.enableMask;
 
-            foreach (PuzzleForgeActivator activator in a) { 
+            foreach (PuzzleForgeTriggerSource activator in a) { 
                 if((activator.activationID & activationMask) > 0)
                     activators.Add(activator);
             }
@@ -104,13 +104,13 @@ namespace PuzzleForge
         {
 
             DrawDefaultInspector();
-            switchController = (PuzzleForgeController)target;
+            switchRoomController = (PuzzleForgeRoomController)target;
 
             if (selectedObject == null)
                 return;
 
             reactors = selectedObject.GetReactors();
-            activators = selectedObject.GetActivators();
+            activators = selectedObject.GetTriggers();
 
             DrawToggleMatrix();
         }

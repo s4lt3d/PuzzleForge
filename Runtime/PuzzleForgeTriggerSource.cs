@@ -1,16 +1,17 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace PuzzleForge
 {
-	public class ActivatorActionLayer : ScriptableObject
+	public class TriggerActionMask : ScriptableObject
 	{
-		public int actionLayer = 0;
+		public int actionMask = 0;
 	}
 
-	public class PuzzleForgeActivator : MonoBehaviour, IPuzzleForgeActivator
+	public class PuzzleForgeTriggerSource : MonoBehaviour, IPuzzleForgeTrigger
 	{
-		PuzzleForgeController switchController;
+		PuzzleForgeRoomController switchRoomController;
 
 		[HideInInspector]
 		public ulong activationID = 0; // single hot format
@@ -36,14 +37,14 @@ namespace PuzzleForge
 		void Start()
 		{
 
-			switchController = FindSwitchController(transform.parent);
+			switchRoomController = FindSwitchController(transform.parent);
 		}
 
 		int depthCount = 0;
 
-		PuzzleForgeController FindSwitchController(Transform obj)
+		PuzzleForgeRoomController FindSwitchController(Transform obj)
 		{
-			PuzzleForgeController sc;
+			PuzzleForgeRoomController sc;
 
 			if (obj == null)
 				return null;
@@ -53,7 +54,7 @@ namespace PuzzleForge
 			{
 				return null;
 			}
-			sc = obj.GetComponent<PuzzleForgeController>();
+			sc = obj.GetComponent<PuzzleForgeRoomController>();
 			if (sc == null)
 				sc = FindSwitchController(obj.parent);
 
@@ -64,7 +65,7 @@ namespace PuzzleForge
 		{
 			if (keyboardDebug == true)
 			{
-				if (switchController != null && mouseClickDebug == true)
+				if (switchRoomController != null && mouseClickDebug == true)
 				{
 					if (Input.GetButtonDown("Fire2"))
 					{
@@ -81,7 +82,7 @@ namespace PuzzleForge
 		void OnMouseDown()
 		{
 
-			if (switchController != null && mouseClickDebug == true)
+			if (switchRoomController != null && mouseClickDebug == true)
 			{
 				mouseState = !mouseState;
 				if (mouseState == true)
@@ -99,7 +100,7 @@ namespace PuzzleForge
 
 		public void Enable()
 		{
-			if (switchController == null)
+			if (switchRoomController == null)
 				return;
 			if (isEnabled == true)
 				return;
@@ -110,14 +111,14 @@ namespace PuzzleForge
 			latched = true;
 
 			if (sendDisable == false)
-				switchController.Enable(activationID);
+				switchRoomController.Enable(activationID);
 			else
-				switchController.Disable(activationID);
+				switchRoomController.Disable(activationID);
 		}
 
 		public void Disable()
 		{
-			if (switchController == null)
+			if (switchRoomController == null)
 				return;
 			if (isEnabled == false)
 				return;
@@ -127,9 +128,9 @@ namespace PuzzleForge
 				return;
 
 			if (sendDisable == true)
-				switchController.Enable(activationID);
+				switchRoomController.Enable(activationID);
 			else
-				switchController.Disable(activationID);
+				switchRoomController.Disable(activationID);
 		}
 
 		void OnTriggerEnter2D(Collider2D other)

@@ -2,7 +2,7 @@
 
 namespace PuzzleForge
 {
-    interface IPuzzleForgeActivator
+    interface IPuzzleForgeTrigger
     {
         public void StartInteraction(Component other);
         public void StopInteraction(Component other);
