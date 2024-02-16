@@ -2,19 +2,20 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
+    [IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
     public class PuzzleForgeRoomController : MonoBehaviour
     {
         [System.NonSerialized]
         public PuzzleForgeReactor[] objectsToTrigger;
         [System.NonSerialized]
-        public PuzzleForgeTriggerSource[] objectsWhichReact;
-        private IPuzzleForgeTriggerable[] triggers;
+        public PuzzleForgeTriggerSignal[] objectsWhichReact;
+        private IPuzzleForgeReactor[] reactors;
 
         public void Awake()
         {
             GetReactors();
             GetTriggers();
-            triggers = GetComponentsInChildren<IPuzzleForgeTriggerable>();
+            reactors = GetComponentsInChildren<IPuzzleForgeReactor>();
         }
 
         public PuzzleForgeReactor[] GetReactors()
@@ -24,27 +25,27 @@ namespace PuzzleForge
             return objectsToTrigger;
         }
 
-        public PuzzleForgeTriggerSource[] GetTriggers()
+        public PuzzleForgeTriggerSignal[] GetTriggers()
         {
-            objectsWhichReact = gameObject.GetComponentsInChildren<PuzzleForgeTriggerSource>();
+            objectsWhichReact = gameObject.GetComponentsInChildren<PuzzleForgeTriggerSignal>();
             return objectsWhichReact;
         }
 
         public void Enable(ulong actionMask)
         {
             Debug.Log($"Enable received for layer {actionMask}");
-            foreach (var trigger in triggers)
+            foreach (var reactor in reactors)
             {
-                trigger.Activate(actionMask);
+                reactor.Activate(actionMask);
             }
         }
 
         public void Disable(ulong actionMask)
         {
             Debug.Log($"Disable received for layer {actionMask}");
-            foreach (var trigger in triggers)
+            foreach (var reactor in reactors)
             {
-                trigger.Deactivate(actionMask);
+                reactor.Deactivate(actionMask);
             }
         }
     }

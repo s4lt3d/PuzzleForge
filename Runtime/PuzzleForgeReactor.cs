@@ -5,9 +5,9 @@ using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-	public class PuzzleForgeReactor : MonoBehaviour, IPuzzleForgeTriggerable
+	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
+	public class PuzzleForgeReactor : MonoBehaviour, IPuzzleForgeReactor
 	{
-
 		// Get animators for all children
 		// IEnumerator for deactivation
 

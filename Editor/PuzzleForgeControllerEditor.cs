@@ -12,7 +12,7 @@ namespace PuzzleForge
         bool[,] enableFieldsArray = new bool[4, 4];
         bool[,] disableFieldsArray = new bool[4, 4];
         PuzzleForgeReactor[] reactors;
-        PuzzleForgeTriggerSource[] activators;
+        PuzzleForgeTriggerSignal[] activators;
         GameObject selected = null;
 
         PuzzleForgeRoomController switchRoomController;
@@ -65,7 +65,7 @@ namespace PuzzleForge
                 DrawCurve(switchRoomController.transform.position, reactor.transform.position, Color.gray, 0.85f);
             }
 
-            foreach (PuzzleForgeTriggerSource activator in switchRoomController.objectsWhichReact)
+            foreach (PuzzleForgeTriggerSignal activator in switchRoomController.objectsWhichReact)
             {
                 DrawCurve(switchRoomController.transform.position, activator.transform.position, Color.gray, 0.7f);
             }
@@ -74,23 +74,23 @@ namespace PuzzleForge
             // Drawing curves to reactors and activators, assuming these methods are correctly implemented
             foreach (PuzzleForgeReactor reactor in switchRoomController.objectsToTrigger)
             {
-                List<PuzzleForgeTriggerSource> activators = GetActivators(reactor);
-                foreach(PuzzleForgeTriggerSource activator in activators)
+                List<PuzzleForgeTriggerSignal> activators = GetActivators(reactor);
+                foreach(PuzzleForgeTriggerSignal activator in activators)
                 {
                     DrawCurve(activator.transform.position, reactor.transform.position, Color.red, 0.85f, 3);
                 }
             }
         }
 
-        private List<PuzzleForgeTriggerSource> GetActivators(PuzzleForgeReactor reactor)
+        private List<PuzzleForgeTriggerSignal> GetActivators(PuzzleForgeReactor reactor)
         {
-            List<PuzzleForgeTriggerSource> activators  = new List<PuzzleForgeTriggerSource>();
+            List<PuzzleForgeTriggerSignal> activators  = new List<PuzzleForgeTriggerSignal>();
 
-            PuzzleForgeTriggerSource[] a = switchRoomController.GetTriggers();
+            PuzzleForgeTriggerSignal[] a = switchRoomController.GetTriggers();
 
             ulong activationMask = reactor.disableMask | reactor.enableMask;
 
-            foreach (PuzzleForgeTriggerSource activator in a) { 
+            foreach (PuzzleForgeTriggerSignal activator in a) { 
                 if((activator.activationID & activationMask) > 0)
                     activators.Add(activator);
             }

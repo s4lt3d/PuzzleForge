@@ -9,25 +9,44 @@ namespace PuzzleForge
 		public int actionMask = 0;
 	}
 
-	public class PuzzleForgeTriggerSource : MonoBehaviour, IPuzzleForgeTrigger
+	public enum TriggerMode
 	{
+		Simple, 
+		Latching, 
+		Toggle
+	}
+
+	public enum TriggerType
+	{
+		Normal,
+		Inverted 
+	}
+	
+
+	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
+	public class PuzzleForgeTriggerSignal : MonoBehaviour, IPuzzleForgeTrigger
+	{
+		public TriggerMode triggerMode;
+		public TriggerType triggerType;
+		public List<string> tagRequired = new List<string> { "Player" };
+		
 		PuzzleForgeRoomController switchRoomController;
 
 		[HideInInspector]
 		public ulong activationID = 0; // single hot format
-		public bool latching = false;
-        [HideInInspector] // has custom inspector
-        public bool sendDisable = false;
-		public bool mouseClickDebug = false;
+		
+        [Range(0, 10)]
+        public int activationTagCount = 1;
+        [Range(0, 10)]
+        public int deactivateTagCount = 0;
+        
+        public bool mouseClickDebug = false;
 		public bool keyboardDebug = false;
 		bool mouseState = false;
 		bool keyboardState = false;
 		bool latched = false;
 		bool isEnabled = false;
-		public int unitsRequiredToActivate = 1;
-		public int unitsRequiredToDeactivate = 0;
-		public List<string> tagRequired = new List<string> { "Player" };
-		public bool toggle = false;
+
 		bool triggerToggleState = false;
 
 
@@ -106,11 +125,11 @@ namespace PuzzleForge
 				return;
 			isEnabled = true;
 
-			if (latched && latching)
+			if (latched && triggerMode == TriggerMode.Latching)
 				return;
 			latched = true;
 
-			if (sendDisable == false)
+			if (triggerType == TriggerType.Inverted)
 				switchRoomController.Enable(activationID);
 			else
 				switchRoomController.Disable(activationID);
@@ -124,10 +143,10 @@ namespace PuzzleForge
 				return;
 			isEnabled = false;
 
-			if (latched && latching)
+			if (latched && triggerMode == TriggerMode.Latching)
 				return;
 
-			if (sendDisable == true)
+			if (triggerType == TriggerType.Normal)
 				switchRoomController.Enable(activationID);
 			else
 				switchRoomController.Disable(activationID);
@@ -151,12 +170,12 @@ namespace PuzzleForge
 				if (triggeredObjects.Contains(other.gameObject))
 					return;
 				triggeredObjects.Add(other.gameObject);
-				if (triggeredObjects.Count >= unitsRequiredToActivate)
+				if (triggeredObjects.Count >= activationTagCount)
 				{
-					if (toggle == false)
+					if (triggerMode != TriggerMode.Toggle)
 						Enable();
 
-					if (toggle == true)
+					if (triggerMode == TriggerMode.Toggle)
 					{
 						if (triggerToggleState == false)
 						{
@@ -187,9 +206,9 @@ namespace PuzzleForge
 			if (tagRequired.Contains(other.tag))
 			{
 				triggeredObjects.Remove(other.gameObject);
-				if (triggeredObjects.Count <= unitsRequiredToDeactivate)
+				if (triggeredObjects.Count <= deactivateTagCount)
 				{
-					if (toggle == false)
+					if (triggerMode != TriggerMode.Toggle)
 						Disable();
 					// Don't do anything if toggle is enabled. All toggle action happens in trigger enter
 				}
