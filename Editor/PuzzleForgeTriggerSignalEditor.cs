@@ -17,12 +17,12 @@ namespace PuzzleForge
 
             if (GUILayout.Button("Test Enable"))
             {
-                triggerSignal.Enable();
+                triggerSignal.DebugActivate();
             }
 
             if (GUILayout.Button("Test Disable"))
             {
-                triggerSignal.Disable();
+                triggerSignal.DebugDeactivate();
             }
         }
     }
