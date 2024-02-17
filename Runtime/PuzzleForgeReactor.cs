@@ -22,7 +22,7 @@ namespace PuzzleForge
         Inverted 
     }
     
-    [IconAttribute("Packages/com.waltergordy.puzzleforge/Assets/Gizmos/PuzzleForgeTriggerSignal.png")]
+    [IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Gizmos/PuzzleForgeTriggerSignal.png")]
     public class PuzzleForgeReactor : ReactorBase
     {
         public ReactorType reactorType;
@@ -42,8 +42,6 @@ namespace PuzzleForge
         private bool state;
         
         bool hasFired = false;
-        
-        bool hasLatched = false;
         
         public override void React(bool ingress)
         {
@@ -79,9 +77,6 @@ namespace PuzzleForge
             if (ActivationDelay > 0)
                 yield return new WaitForSeconds(ActivationDelay);
 
-            //if((enableMask & enableMaskRegister) != enableMask)
-            //	yield break;
-
             onActivated.Invoke();
 
             yield break;
@@ -91,7 +86,6 @@ namespace PuzzleForge
         {
             if (DeactivationDelay > 0)
                 yield return new WaitForSeconds(DeactivationDelay);
-
            
             onDeactivated.Invoke();
 

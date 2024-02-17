@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
-    [IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
+    
     public class PuzzleForgeRoomController : MonoBehaviour
     {
         [System.NonSerialized]

@@ -23,7 +23,7 @@ namespace PuzzleForge
 		DeactivateOnly
 	}
 	
-	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
+	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Gizmos/PuzzleForgeTriggerSignal.png")]
 	public class PuzzleForgeSignalBase : MonoBehaviour
 	{
 		public TriggerType triggerType;
@@ -108,7 +108,6 @@ namespace PuzzleForge
 				}
 				else
 				{
-
 					DebugActivate();
 				}
 			}
