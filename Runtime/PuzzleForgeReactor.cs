@@ -1,226 +1,101 @@
+﻿using System.Collections;
 using UnityEngine;
-using System.Collections;
 using UnityEngine.Events;
-using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
-	public class PuzzleForgeReactor : MonoBehaviour, IPuzzleForgeReactor
-	{
-		// Get animators for all children
-		// IEnumerator for deactivation
+    public abstract class ReactorBase : MonoBehaviour
+    {
+        public abstract void React(bool state);
+    } 
+    
+    public enum ReactorType
+    {
+        Simple, 
+        Latching, 
+        Toggle
+    }
 
-		public bool inverted = false;
-		bool isEnabled;
-		public bool overrideSpeed = false;
-		public float animationSpeed = 1;
-		public bool initializeActive = true;
+    public enum ReactorMode
+    {
+        Normal,
+        Inverted 
+    }
+    
+    [IconAttribute("Packages/com.waltergordy.puzzleforge/Assets/Gizmos/PuzzleForgeTriggerSignal.png")]
+    public class PuzzleForgeReactor : ReactorBase
+    {
+        public ReactorType reactorType;
+        public ReactorMode reactorMode;
+        
+        [Min(0)]
+        public float ActivationDelay = 0.0f;
+        [Min(0)]
+        public float DeactivationDelay = 0.0f;
+        
+        [SerializeField]
+        private UnityEvent onActivated;
 
-		public bool oneShot = false;
-		bool hasLatched = false;
-		public bool anyActivator = false;
+        [SerializeField]
+        private UnityEvent onDeactivated;
 
-		[SerializeField]
-		public ulong enableMask = 0;
-		[SerializeField]
-		public ulong disableMask = 0;
+        private bool state;
+        
+        bool hasFired = false;
+        
+        bool hasLatched = false;
+        
+        public override void React(bool ingress)
+        {
+            if (reactorType == ReactorType.Latching)
+            {
+                if (hasFired) return;
+                hasFired = true;
+            }
+			
+            SetNextState(ingress);
+            
+            if (state) 
+                StartCoroutine(ActivateCR());
+            else 
+                StartCoroutine(DeactivateCR());
+        }
 
-		public float AnimationEnableDelay = 0.0f;
-		public float AnimationDisableDelay = 0.0f;
+        
+        protected void SetNextState(bool ingress)
+        {
+            if (reactorType == ReactorType.Toggle)
+            {
+                state = !state;
+            }
+            else
+            {
+                state = reactorMode == ReactorMode.Normal ? ingress : !ingress;
+            }
+        }
+        
+        IEnumerator ActivateCR()
+        {
+            if (ActivationDelay > 0)
+                yield return new WaitForSeconds(ActivationDelay);
 
-		string animatorControllerName = "";
-		public Animator anim;
+            //if((enableMask & enableMaskRegister) != enableMask)
+            //	yield break;
 
-		protected ulong enableMaskRegister = 0;
-		protected ulong disableMaskRegister = 0;
+            onActivated.Invoke();
 
-		public bool toggle = false;
+            yield break;
+        }
 
-		[SerializeField]
-		private UnityEvent onActivated;
+        IEnumerator DeactivateCR()
+        {
+            if (DeactivationDelay > 0)
+                yield return new WaitForSeconds(DeactivationDelay);
 
-		[SerializeField]
-		private UnityEvent onDeactivated;
+           
+            onDeactivated.Invoke();
 
-		// Use this for initialization
-		void Awake()
-		{
-			if (anim == null) // incase one hasn't been specified 
-				anim = gameObject.GetComponent<Animator>();
-
-			if (animatorControllerName.Length > 0)
-			{
-				RuntimeAnimatorController runtimeAnimController = (RuntimeAnimatorController)Resources.Load(animatorControllerName);
-				anim.runtimeAnimatorController = runtimeAnimController;
-			}
-			if (anim != null)
-				anim.SetBool("Enabled", inverted);
-		}
-
-		void Start()
-		{
-			if (initializeActive)
-				Activate(0);
-			else
-				Deactivate(0);
-		}
-
-		public bool isActivated()
-		{
-			return isEnabled;
-
-		}
-
-		bool serviceEnableMask(ulong incomingMask)
-		{
-			enableMaskRegister |= incomingMask;
-			disableMaskRegister &= ~incomingMask;
-
-			if (incomingMask == 0) // special use
-				return true;
-
-			if ((incomingMask & enableMask) == 0)
-				return false;
-
-			return true;
-		}
-
-		bool serviceDisableMask(ulong incomingMask)
-		{
-			disableMaskRegister |= incomingMask;
-			enableMaskRegister &= ~incomingMask;
-
-			if (incomingMask == 0) // special use
-				return true;
-
-			if ((incomingMask & disableMask) == 0)
-				return false;
-
-			return true;
-		}
-
-
-		IEnumerator ActivateCR()
-		{
-			if (AnimationEnableDelay > 0)
-				yield return new WaitForSeconds(AnimationEnableDelay);
-
-			//if((enableMask & enableMaskRegister) != enableMask)
-			//	yield break;
-
-			disableMaskRegister = 0;
-
-			isEnabled = !inverted;
-
-			ActivationAction();
-
-			yield break;
-		}
-
-		IEnumerator DeactivateCR()
-		{
-			if (AnimationDisableDelay > 0)
-				yield return new WaitForSeconds(AnimationDisableDelay);
-
-			//if((disableMask & disableMaskRegister) != disableMask)
-			//	yield break;
-
-			enableMaskRegister = 0;
-
-			isEnabled = inverted;
-
-			DeactivateAction();
-
-			yield break;
-		}
-
-		protected virtual void ActivationAction()
-		{
-			if (onActivated != null)
-				onActivated.Invoke();
-
-			if (anim == null)
-				return;
-
-			if (overrideSpeed == true)
-			{
-				if (inverted)
-					anim.SetFloat("Speed", 0);
-				else
-					anim.SetFloat("Speed", animationSpeed);
-			}
-			else
-			{
-				anim.SetBool("Enabled", !inverted);
-			}
-		}
-
-		protected virtual void DeactivateAction()
-		{
-			if (onDeactivated != null)
-				onDeactivated.Invoke();
-
-			if (anim == null)
-				return;
-
-			if (overrideSpeed == true)
-			{
-				if (inverted)
-					anim.SetFloat("Speed", animationSpeed);
-				else
-					anim.SetFloat("Speed", 0);
-			}
-			else
-			{
-				if (anim != null)
-					anim.SetBool("Enabled", inverted);
-			}
-		}
-
-
-		public void Activate(ulong incomingMask)
-		{
-			if (oneShot && hasLatched)
-				return;
-
-			if (serviceEnableMask(incomingMask) == false)
-				return;
-
-			if (anyActivator == true || incomingMask == 0)
-				enableMaskRegister = enableMask;
-
-			if (toggle == true)
-				inverted = !inverted;
-
-			if ((enableMask & enableMaskRegister) == enableMask)
-			{
-				hasLatched = true;
-				StartCoroutine(ActivateCR());
-			}
-		}
-
-		public void Deactivate(ulong incomingMask)
-		{
-			if (oneShot && hasLatched)
-				return;
-
-			if (serviceDisableMask(incomingMask) == false)
-				return;
-
-			if (anyActivator == true || incomingMask == 0)
-				disableMaskRegister = disableMask;
-
-			if (toggle == true)
-			{
-				Activate(incomingMask);
-				return;
-			}
-
-			if ((disableMask & disableMaskRegister) == disableMask)
-			{
-				StartCoroutine(DeactivateCR());
-			}
-		}
-	}
+            yield break;
+        }
+    }
 }

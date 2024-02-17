@@ -30,7 +30,7 @@ namespace PuzzleForge
 		public TriggerMode triggerMode;
 		public TriggerInteractions triggerInteractions;
 		public List<string> tagRequired = new List<string> { "Player" };
-		public List<Reactor> connectedReactors;
+		public List<PuzzleForgeReactor> connectedReactors;
 		
         [Range(0, 10)]
         public int activationTagCount = 1;
