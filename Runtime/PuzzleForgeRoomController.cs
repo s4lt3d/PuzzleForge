@@ -8,7 +8,7 @@ namespace PuzzleForge
         [System.NonSerialized]
         public PuzzleForgeReactor[] objectsToTrigger;
         [System.NonSerialized]
-        public PuzzleForgeTriggerSignal[] objectsWhichReact;
+        public PuzzleForgeSignalBase[] objectsWhichReact;
         private IPuzzleForgeReactor[] reactors;
 
         public void Awake()
@@ -25,9 +25,9 @@ namespace PuzzleForge
             return objectsToTrigger;
         }
 
-        public PuzzleForgeTriggerSignal[] GetTriggers()
+        public PuzzleForgeSignalBase[] GetTriggers()
         {
-            objectsWhichReact = gameObject.GetComponentsInChildren<PuzzleForgeTriggerSignal>();
+            objectsWhichReact = gameObject.GetComponentsInChildren<PuzzleForgeSignalBase>();
             return objectsWhichReact;
         }
 

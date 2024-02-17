@@ -5,24 +5,24 @@ using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-    [CustomEditor(typeof(PuzzleForgeTriggerSignal))]
+    [CustomEditor(typeof(PuzzleForgeSignalBase))]
 
     public class PuzzleForgeTriggerSignalEditor : Editor
     {
         override public void OnInspectorGUI()
         {
-            PuzzleForgeTriggerSignal triggerSignal = (PuzzleForgeTriggerSignal)target;
+            PuzzleForgeSignalBase signalBase = (PuzzleForgeSignalBase)target;
 
             DrawDefaultInspector();
 
             if (GUILayout.Button("Test Enable"))
             {
-                triggerSignal.DebugActivate();
+                signalBase.DebugActivate();
             }
 
             if (GUILayout.Button("Test Disable"))
             {
-                triggerSignal.DebugDeactivate();
+                signalBase.DebugDeactivate();
             }
         }
     }
