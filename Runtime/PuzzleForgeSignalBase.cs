@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -43,9 +42,6 @@ namespace PuzzleForge
         public List<string> tagsActive = new List<string>();
 		bool mouseState = false;
 		bool hasFired = false;
-		bool isEnabled = false;
-
-		bool triggerToggleState = false;
 
 		private bool state = false;
 
@@ -74,22 +70,13 @@ namespace PuzzleForge
 					return;
 			}
 
-			switch (triggerType)
+			if (triggerType == TriggerType.Latching)
 			{
-				case TriggerType.Simple:
-					SetNextState(ingress);
-					break;
-				case TriggerType.Latching:
-					if (hasFired) return;
-					hasFired = true;
-					SetNextState(ingress);
-					break;
-				case TriggerType.Toggle:
-					state = !state;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
+				if (hasFired) return;
+				hasFired = true;
 			}
+			
+			SetNextState(ingress);
 			
 			foreach (var reactor in connectedReactors)
 			{
@@ -97,9 +84,16 @@ namespace PuzzleForge
 			}
 		}
 		
-		private void SetNextState(bool ingress)
+		protected void SetNextState(bool ingress)
 		{
-			state = triggerMode == TriggerMode.Normal ? ingress : !ingress;
+			if (triggerType == TriggerType.Toggle)
+			{
+				state = !state;
+			}
+			else
+			{
+				state = triggerMode == TriggerMode.Normal ? ingress : !ingress;
+			}
 		}
 		
 		void OnMouseDown()
