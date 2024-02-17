@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 namespace PuzzleForge
 {
@@ -24,8 +23,7 @@ namespace PuzzleForge
 		ActivateOnly,
 		DeactivateOnly
 	}
-
-
+	
 	[IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Resources/PuzzleForgeTriggerSignal.png")]
 	public class PuzzleForgeSignalBase : MonoBehaviour
 	{
@@ -79,14 +77,12 @@ namespace PuzzleForge
 			switch (triggerType)
 			{
 				case TriggerType.Simple:
-					if (triggerMode == TriggerMode.Normal)
-						state = ingress;
-					else
-						state = !ingress;
+					SetNextState(ingress);
 					break;
 				case TriggerType.Latching:
-					if (hasFired)
-						return;
+					if (hasFired) return;
+					hasFired = true;
+					SetNextState(ingress);
 					break;
 				case TriggerType.Toggle:
 					state = !state;
@@ -95,11 +91,15 @@ namespace PuzzleForge
 					throw new ArgumentOutOfRangeException();
 			}
 			
-			hasFired = true;
 			foreach (var reactor in connectedReactors)
 			{
 				reactor.React(state);
 			}
+		}
+		
+		private void SetNextState(bool ingress)
+		{
+			state = triggerMode == TriggerMode.Normal ? ingress : !ingress;
 		}
 		
 		void OnMouseDown()
