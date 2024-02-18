@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine.Serialization;
 
 namespace PuzzleForge
 {
@@ -29,7 +30,8 @@ namespace PuzzleForge
 		public TriggerMode triggerMode;
 		public TriggerInteractions triggerInteractions;
 		public List<string> tagRequired = new List<string> { "Player" };
-		public List<PuzzleForgeReactor> connectedReactors;
+		public List<PuzzleForgeReactor> activationReactors;
+		public List<PuzzleForgeReactor> deactivationReactors;
 		
         [Range(0, 10)]
         public int activationTagCount = 1;
@@ -76,10 +78,21 @@ namespace PuzzleForge
 			}
 			
 			SetNextState(ingress);
-			
-			foreach (var reactor in connectedReactors)
+
+			if (state == true && triggerInteractions != TriggerInteractions.DeactivateOnly)
 			{
-				reactor.React(state);
+				foreach (var reactor in activationReactors)
+				{
+					reactor.React(state);
+				}
+			}
+
+			if (state == false && triggerInteractions != TriggerInteractions.ActivateOnly)
+			{
+				foreach (var reactor in deactivationReactors)
+				{
+					reactor.React(state);
+				}
 			}
 		}
 		

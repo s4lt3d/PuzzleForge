@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -32,12 +33,13 @@ namespace PuzzleForge
         [Min(0)]
         public float DeactivationDelay = 0.0f;
         
+
         [SerializeField]
         private UnityEvent onActivated;
 
         [SerializeField]
         private UnityEvent onDeactivated;
-
+        
         private bool state;
         
         bool hasFired = false;
@@ -57,7 +59,6 @@ namespace PuzzleForge
             else 
                 StartCoroutine(DeactivateCR());
         }
-
         
         protected void SetNextState(bool ingress)
         {
