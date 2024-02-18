@@ -14,7 +14,8 @@ namespace PuzzleForge
     {
         Simple, 
         Latching, 
-        Toggle
+        Toggle,
+        Combination // not yet used
     }
 
     public enum ReactorMode
