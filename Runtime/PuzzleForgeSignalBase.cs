@@ -29,18 +29,17 @@ namespace PuzzleForge
 		public TriggerType triggerType;
 		public TriggerMode triggerMode;
 		public TriggerInteractions triggerInteractions;
-		public List<string> tagRequired = new List<string> { "Player" };
+		[Range(0, 10)]
+		public int activationTagCount = 1;
+		[Range(0, 10)]
+		public int deactivateTagCount = 0;
+		public List<string> interactionTags = new List<string> { "Player" };
 		public List<PuzzleForgeReactor> activationReactors;
 		public List<PuzzleForgeReactor> deactivationReactors;
 		
-        [Range(0, 10)]
-        public int activationTagCount = 1;
-        [Range(0, 10)]
-        public int deactivateTagCount = 0;
-        
         public bool mouseClickDebug = false;
 
-        public List<string> tagsActive = new List<string>();
+        protected List<string> tagsActive = new List<string>();
 		bool mouseState = false;
 		bool hasFired = false;
 
@@ -48,6 +47,9 @@ namespace PuzzleForge
 
 		protected void SendSignal(Component component, bool ingress)
 		{
+			if (!interactionTags.Contains(component.tag))
+				return;
+			
 			if (ingress)
 			{
 				if (component != null)
@@ -55,6 +57,7 @@ namespace PuzzleForge
 					tagsActive.Add(component.tag);
 					if (tagsActive.Count < activationTagCount)
 						return;
+					
 				}
 				if (triggerInteractions == TriggerInteractions.DeactivateOnly)
 					return;

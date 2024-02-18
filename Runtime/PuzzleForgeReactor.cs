@@ -78,8 +78,6 @@ namespace PuzzleForge
                 yield return new WaitForSeconds(ActivationDelay);
 
             onActivated.Invoke();
-
-            yield break;
         }
 
         IEnumerator DeactivateCR()
@@ -88,8 +86,6 @@ namespace PuzzleForge
                 yield return new WaitForSeconds(DeactivationDelay);
            
             onDeactivated.Invoke();
-
-            yield break;
         }
     }
 }
