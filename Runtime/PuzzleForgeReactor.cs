@@ -22,7 +22,6 @@ namespace PuzzleForge
         Inverted 
     }
     
-    [IconAttribute(@"Packages/com.waltergordy.puzzleforge/Editor/Gizmos/PuzzleForgeTriggerSignal.png")]
     public class PuzzleForgeReactor : ReactorBase
     {
         public ReactorType reactorType;
