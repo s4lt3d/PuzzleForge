@@ -4,24 +4,26 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
-    [CustomEditor(typeof(PuzzleForgeRoomController))]
-    public class PuzzleForgeRoomControllerEditor : Editor
+    [CustomEditor(typeof(PFRoomController))]
+    public class PFRoomControllerEditor : Editor
     {
         private readonly int longestReactorName = 150;
 
         private readonly int                         toggleSize = 15;
-        private          List<PuzzleForgeSignalBase> activators;
+        private          List<PFSignalBase> activators;
         private          bool[,]                     disableFieldsArray = new bool[4, 4];
 
         private bool[,] enableFieldsArray = new bool[4, 4];
 
-        private List<PuzzleForgeReactorBase> reactors;
+        private List<PFReactorBase> reactors;
 
         private GameObject                selected = null;
-        private PuzzleForgeRoomController switchRoomController;
+        private PFRoomController switchRoomController;
 
         public void OnSceneGUI()
         {
+            if (switchRoomController == null)
+                return;
             foreach (var hookup in switchRoomController.activationHookups)
                 foreach (var reactor in hookup.reactors)
                     EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
@@ -37,7 +39,7 @@ namespace PuzzleForge
         {
             DrawDefaultInspector();
 
-            switchRoomController = (PuzzleForgeRoomController)target;
+            switchRoomController = (PFRoomController)target;
             activators           = switchRoomController.signals;
             reactors             = switchRoomController.reactors;
 
@@ -58,10 +60,10 @@ namespace PuzzleForge
 
                 for (var activatorIndex = 0; activatorIndex < activators.Count; activatorIndex++)
                 {
-                    var activationEntry = new ActivationHookupEntry
-                        { signal = activators[activatorIndex], reactors = new List<PuzzleForgeReactorBase>() };
-                    var deactivationEntry = new ActivationHookupEntry
-                        { signal = activators[activatorIndex], reactors = new List<PuzzleForgeReactorBase>() };
+                    var activationEntry = new PFActivationHookupEntry
+                        { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
+                    var deactivationEntry = new PFActivationHookupEntry
+                        { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
 
                     for (var reactorIndex = 0; reactorIndex < reactors.Count; reactorIndex++)
                     {
@@ -144,7 +146,6 @@ namespace PuzzleForge
             EditorGUILayout.LabelField("Activation Signal Subscribers", EditorStyles.boldLabel);
             DrawReactorToggles(enableFieldsArray, " ");
 
-            // Section for "Disable" toggles
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("Deactivation Signal Subscribers", EditorStyles.boldLabel);
             DrawReactorToggles(disableFieldsArray, " ");

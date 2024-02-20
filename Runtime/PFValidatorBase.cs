@@ -1,6 +1,6 @@
 ﻿namespace PuzzleForge
 {
-    public abstract class PuzzleForgeValidatorBase
+    public abstract class PFValidatorBase
     {
         public abstract bool Validate();
     }

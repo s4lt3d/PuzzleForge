@@ -2,7 +2,7 @@
 
 namespace PuzzleForge
 {
-    public class PuzzleForgeTriggerSignal : PuzzleForgeSignalBase
+    public class PFTriggerSignal : PFSignalBase
     {
         private void OnTriggerEnter(Collider other)
         {

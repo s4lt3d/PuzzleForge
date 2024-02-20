@@ -23,7 +23,7 @@ namespace PuzzleForge
         DeactivationOnly
     }
 
-    public class PuzzleForgeSignalBase : PuzzleForgeBase
+    public class PFSignalBase : PFBase
     {
         public TriggerType triggerType;
         public TriggerMode triggerMode;
@@ -38,10 +38,10 @@ namespace PuzzleForge
         public List<string> interactionTags = new() { "Player" };
 
         [HideInInspector]
-        public List<PuzzleForgeEventReactor> activationReactors;
+        public List<PFEventReactor> activationReactors;
 
         [HideInInspector]
-        public List<PuzzleForgeEventReactor> deactivationReactors;
+        public List<PFEventReactor> deactivationReactors;
 
         public bool mouseClickDebug;
         private bool hasFired;

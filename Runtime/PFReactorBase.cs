@@ -14,7 +14,7 @@ namespace PuzzleForge
         Inverted
     }
 
-    public abstract class PuzzleForgeReactorBase : PuzzleForgeBase
+    public abstract class PFReactorBase : PFBase
     {
         public ReactorType reactorType;
         public ReactorMode reactorMode;

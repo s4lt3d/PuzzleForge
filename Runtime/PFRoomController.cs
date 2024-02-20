@@ -3,21 +3,21 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
-    public class PuzzleForgeRoomController : PuzzleForgeBase
+    public class PFRoomController : PFBase
     {
         [HideInInspector]
-        public List<PuzzleForgeSignalBase> signals = new();
+        public List<PFSignalBase> signals = new();
 
         [HideInInspector]
-        public List<PuzzleForgeReactorBase> reactors = new();
+        public List<PFReactorBase> reactors = new();
 
         [HideInInspector]
-        public List<ActivationHookupEntry> activationHookups = new();
+        public List<PFActivationHookupEntry> activationHookups = new();
 
         [HideInInspector]
-        public List<ActivationHookupEntry> deactivationHookups = new();
+        public List<PFActivationHookupEntry> deactivationHookups = new();
 
-        public void SendSignal(PuzzleForgeSignalBase sender, bool ingress)
+        public void SendSignal(PFSignalBase sender, bool ingress)
         {
             var hookups = ingress ? activationHookups : deactivationHookups;
 
@@ -30,27 +30,27 @@ namespace PuzzleForge
         }
 
 
-        public void RegisterSignal(PuzzleForgeSignalBase signal)
+        public void RegisterSignal(PFSignalBase signal)
         {
             if (signals.Contains(signal))
                 return;
             signals.Add(signal);
         }
 
-        public void RemoveSignal(PuzzleForgeSignalBase signal)
+        public void RemoveSignal(PFSignalBase signal)
         {
             if (signals.Contains(signal))
                 signals.Remove(signal);
         }
 
-        public void RegisterReactor(PuzzleForgeReactorBase reactor)
+        public void RegisterReactor(PFReactorBase reactor)
         {
             if (reactors.Contains(reactor))
                 return;
             reactors.Add(reactor);
         }
 
-        public void RemoveReactor(PuzzleForgeReactorBase reactor)
+        public void RemoveReactor(PFReactorBase reactor)
         {
             if (reactors.Contains(reactor))
                 reactors.Remove(reactor);

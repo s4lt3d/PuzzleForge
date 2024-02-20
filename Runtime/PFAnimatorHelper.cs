@@ -11,7 +11,7 @@ public enum AnimatorParameterTypes
 }
 
 [Serializable] // This makes AnimatorParameters visible in the Inspector
-public class AnimatorParameters
+public class PFAnimatorParameters
 {
     public string eventName;
     public AnimatorParameterTypes parameterType;
@@ -24,9 +24,9 @@ public class AnimatorParameters
 /// <summary>
 ///     Helps set animator functions with multiple parameters from unity events in the inspector without code.
 /// </summary>
-public class PuzzleForgeAnimatorHelper : MonoBehaviour
+public class PFAnimatorHelper : MonoBehaviour
 {
-    public List<AnimatorParameters> parameters;
+    public List<PFAnimatorParameters> parameters;
 
     protected Animator animator;
 

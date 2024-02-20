@@ -4,7 +4,7 @@ using UnityEngine.Events;
 
 namespace PuzzleForge
 {
-    public class PuzzleForgeEventReactor : PuzzleForgeReactorBase
+    public class PFEventReactor : PFReactorBase
     {
         [Min(0)]
         public float ActivationDelay;
