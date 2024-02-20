@@ -1,6 +1,4 @@
-﻿using UnityEditor;
-
-namespace PuzzleForge
+﻿namespace PuzzleForge
 {
     public abstract class PuzzleForgeValidatorBase
     {

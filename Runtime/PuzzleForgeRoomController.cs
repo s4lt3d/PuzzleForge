@@ -1,35 +1,32 @@
 ﻿using System.Collections.Generic;
-using UnityEngine.Serialization;
+using UnityEngine;
 
 namespace PuzzleForge
 {
     public class PuzzleForgeRoomController : PuzzleForgeBase
     {
-        public List<PuzzleForgeSignalBase> signals = new List<PuzzleForgeSignalBase>();
-        public List<PuzzleForgeReactorBase> reactors = new List<PuzzleForgeReactorBase>();
+        [HideInInspector]
+        public List<PuzzleForgeSignalBase> signals = new();
 
+        [HideInInspector]
+        public List<PuzzleForgeReactorBase> reactors = new();
 
-        public List<ActivationHookupEntry> activationHookups =
-            new List<ActivationHookupEntry>();
-        
-        public List<ActivationHookupEntry> deactivationHookups =
-            new List<ActivationHookupEntry>();
-        
+        [HideInInspector]
+        public List<ActivationHookupEntry> activationHookups = new();
+
+        [HideInInspector]
+        public List<ActivationHookupEntry> deactivationHookups = new();
+
         public void SendSignal(PuzzleForgeSignalBase sender, bool ingress)
         {
             var hookups = ingress ? activationHookups : deactivationHookups;
-    
+
             foreach (var hookupEntry in hookups)
-            {
                 if (hookupEntry.signal == sender)
                 {
-                    foreach (var reactor in hookupEntry.reactors)
-                    {
-                        reactor.React(ingress);
-                    }
+                    foreach (var reactor in hookupEntry.reactors) reactor.React(ingress);
                     break; // Assuming only one entry per sender, we break after finding and processing it
                 }
-            }
         }
 
 
@@ -45,7 +42,7 @@ namespace PuzzleForge
             if (signals.Contains(signal))
                 signals.Remove(signal);
         }
-        
+
         public void RegisterReactor(PuzzleForgeReactorBase reactor)
         {
             if (reactors.Contains(reactor))

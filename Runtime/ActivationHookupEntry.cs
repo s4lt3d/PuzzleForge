@@ -1,11 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PuzzleForge
 {
-    [System.Serializable]
+    [Serializable]
     public class ActivationHookupEntry
     {
         public PuzzleForgeSignalBase signal;
-        public List<PuzzleForgeReactorBase> reactors = new List<PuzzleForgeReactorBase>();
+        public List<PuzzleForgeReactorBase> reactors = new();
     }
 }

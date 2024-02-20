@@ -4,17 +4,17 @@ namespace PuzzleForge
 {
     public class PuzzleForgeTriggerSignal : PuzzleForgeSignalBase
     {
-        void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerEnter(Collider other)
         {
             SendSignal(other, true);
         }
 
-        void OnTriggerEnter(Collider other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             SendSignal(other, true);
         }
 
-        void OnTriggerExit(Collider other)
+        private void OnTriggerExit(Collider other)
         {
             SendSignal(other, false);
         }
