@@ -1,40 +1,16 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace PuzzleForge
 {
-    public abstract class ReactorBase : MonoBehaviour
+    public class PuzzleForgeEventReactor : PuzzleForgeReactorBase
     {
-        public abstract void React(bool state);
-    } 
-    
-    public enum ReactorType
-    {
-        Simple, 
-        Latching, 
-        Toggle,
-        Combination // not yet used
-    }
-
-    public enum ReactorMode
-    {
-        Normal,
-        Inverted 
-    }
-    
-    public class PuzzleForgeReactor : ReactorBase
-    {
-        public ReactorType reactorType;
-        public ReactorMode reactorMode;
-        
         [Min(0)]
         public float ActivationDelay = 0.0f;
         [Min(0)]
         public float DeactivationDelay = 0.0f;
         
-
         [SerializeField]
         private UnityEvent onActivated;
 

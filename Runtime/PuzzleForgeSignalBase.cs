@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 namespace PuzzleForge
 {
@@ -19,12 +18,12 @@ namespace PuzzleForge
 
 	public enum TriggerInteractions
 	{
-		ActivateAndDeactivate,
-		ActivateOnly,
-		DeactivateOnly
+		ActivationAndDeactivation,
+		ActivationOnly,
+		DeactivationOnly
 	}
 	
-	public class PuzzleForgeSignalBase : MonoBehaviour
+	public class PuzzleForgeSignalBase : PuzzleForgeBase
 	{
 		public TriggerType triggerType;
 		public TriggerMode triggerMode;
@@ -34,8 +33,10 @@ namespace PuzzleForge
 		[Range(0, 10)]
 		public int deactivateTagCount = 0;
 		public List<string> interactionTags = new List<string> { "Player" };
-		public List<PuzzleForgeReactor> activationReactors;
-		public List<PuzzleForgeReactor> deactivationReactors;
+		[HideInInspector]
+		public List<PuzzleForgeEventReactor> activationReactors;
+		[HideInInspector]
+		public List<PuzzleForgeEventReactor> deactivationReactors;
 		
         public bool mouseClickDebug = false;
 
@@ -59,7 +60,7 @@ namespace PuzzleForge
 						return;
 					
 				}
-				if (triggerInteractions == TriggerInteractions.DeactivateOnly)
+				if (triggerInteractions == TriggerInteractions.DeactivationOnly)
 					return;
 			}
 			else
@@ -70,7 +71,7 @@ namespace PuzzleForge
 					if (tagsActive.Count > deactivateTagCount)
 						return;
 				}
-				if (triggerInteractions == TriggerInteractions.ActivateOnly)
+				if (triggerInteractions == TriggerInteractions.ActivationOnly)
 					return;
 			}
 
@@ -82,20 +83,14 @@ namespace PuzzleForge
 			
 			SetNextState(ingress);
 
-			if (state == true && triggerInteractions != TriggerInteractions.DeactivateOnly)
+			if (state == true && triggerInteractions != TriggerInteractions.DeactivationOnly)
 			{
-				foreach (var reactor in activationReactors)
-				{
-					reactor.React(state);
-				}
+				parentController.SendSignal(this, true);
 			}
 
-			if (state == false && triggerInteractions != TriggerInteractions.ActivateOnly)
+			if (state == false && triggerInteractions != TriggerInteractions.ActivationOnly)
 			{
-				foreach (var reactor in deactivationReactors)
-				{
-					reactor.React(state);
-				}
+				parentController.SendSignal(this, false);
 			}
 		}
 		
