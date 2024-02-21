@@ -24,7 +24,7 @@ namespace PuzzleForge
             foreach (var hookupEntry in hookups)
                 if (hookupEntry.signal == sender)
                 {
-                    foreach (var reactor in hookupEntry.reactors) reactor.React(ingress);
+                    foreach (var reactor in hookupEntry.reactors) reactor.React(ingress, sender);
                     break; // Assuming only one entry per sender, we break after finding and processing it
                 }
         }

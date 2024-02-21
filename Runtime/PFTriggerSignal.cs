@@ -16,11 +16,15 @@ namespace PuzzleForge
 
         private void OnTriggerExit(Collider other)
         {
+            if (triggerType == TriggerType.Toggle)
+                return;
             SendSignal(other, false);
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
+            if (triggerType == TriggerType.Toggle)
+                return;
             SendSignal(other, false);
         }
     }

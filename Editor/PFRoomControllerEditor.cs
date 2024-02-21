@@ -17,7 +17,6 @@ namespace PuzzleForge
 
         private List<PFReactorBase> reactors;
 
-        private GameObject                selected = null;
         private PFRoomController switchRoomController;
 
         public void OnSceneGUI()
