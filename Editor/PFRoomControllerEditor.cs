@@ -9,9 +9,9 @@ namespace PuzzleForge
     {
         private readonly int longestReactorName = 150;
 
-        private readonly int                         toggleSize = 15;
-        private          List<PFSignalBase> activators;
-        private          bool[,]                     disableFieldsArray = new bool[4, 4];
+        private readonly int toggleSize = 15;
+        private List<PFSignalBase> activators;
+        private bool[,] disableFieldsArray = new bool[4, 4];
 
         private bool[,] enableFieldsArray = new bool[4, 4];
 
@@ -21,28 +21,47 @@ namespace PuzzleForge
 
         public void OnSceneGUI()
         {
-            if (switchRoomController == null)
-                return;
+            if (switchRoomController == null) return;
+
             foreach (var hookup in switchRoomController.activationHookups)
+            {
+                if (hookup == null) continue;
+
                 foreach (var reactor in hookup.reactors)
+                {
+                    if (hookup.signal == null || reactor == null) continue;
                     EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
                         0.7f);
+                }
+            }
 
             foreach (var hookup in switchRoomController.deactivationHookups)
+            {
+                if (hookup == null) continue;
+
                 foreach (var reactor in hookup.reactors)
+                {
+                    if (hookup.signal == null || reactor == null) continue;
                     EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
                         0.7f);
+                }
+            }
         }
 
         public override void OnInspectorGUI()
         {
-           // DrawDefaultInspector();
+            // DrawDefaultInspector();
 
             switchRoomController = (PFRoomController)target;
-            activators           = switchRoomController.signals;
-            reactors             = switchRoomController.reactors;
+            activators = switchRoomController.signals;
+            reactors = switchRoomController.reactors;
 
-            enableFieldsArray  = new bool[reactors.Count, activators.Count];
+            // sanitize activators and reactors by remove nulls and updating the lists
+            activators.RemoveAll(item => item == null);
+            reactors.RemoveAll(item => item == null);
+            
+            
+            enableFieldsArray = new bool[reactors.Count, activators.Count];
             disableFieldsArray = new bool[reactors.Count, activators.Count];
 
 
@@ -88,7 +107,7 @@ namespace PuzzleForge
             for (var j = 0; j < reactors.Count; j++)
                 for (var i = 0; i < activators.Count; i++)
                 {
-                    enableFieldsArray[j, i]  = false;
+                    enableFieldsArray[j, i] = false;
                     disableFieldsArray[j, i] = false;
                 }
 
@@ -117,7 +136,6 @@ namespace PuzzleForge
 
         private void DrawToggleMatrix()
         {
-            
             var clickableLabelStyle = new GUIStyle(GUI.skin.label)
             {
                 normal = { textColor = Color.cyan }
@@ -131,9 +149,9 @@ namespace PuzzleForge
             for (var i = 0; i < activators.Count; i++)
             {
                 var activatorLabelContent = new GUIContent(activators[i].name);
-                var labelSize= clickableLabelStyle.CalcSize(activatorLabelContent);
+                var labelSize = clickableLabelStyle.CalcSize(activatorLabelContent);
 
-                if (GUI.Button(new Rect(r.x, r.y + i * 15 + 3, labelSize.x, labelSize.y), activatorLabelContent,
+                if (GUI.Button(new Rect(r.x, r.y + i * 18 + 3, labelSize.x, labelSize.y), activatorLabelContent,
                         clickableLabelStyle))
                 {
                     Selection.activeGameObject = activators[i].gameObject;
