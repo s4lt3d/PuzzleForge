@@ -24,113 +24,94 @@ namespace PuzzleForge
     }
 
     public class PFSignalBase : PFBase
+{
+    public TriggerType triggerType;
+    public TriggerMode triggerMode;
+    public TriggerInteractions triggerInteractions;
+    [Range(0, 10)]
+    public int activationTagCount = 1;
+    [Range(0, 10)]
+    public int deactivateTagCount;
+    public List<string> interactionTags = new() { "Player" };
+    [HideInInspector]
+    public List<PFEventReactor> activationReactors;
+    [HideInInspector]
+    public List<PFEventReactor> deactivationReactors;
+    public bool mouseClickDebug;
+    private bool hasFired;
+    private bool mouseState;
+    private bool state;
+    protected List<string> tagsActive = new();
+
+    private void OnMouseDown()
     {
-        public TriggerType triggerType;
-        public TriggerMode triggerMode;
-        public TriggerInteractions triggerInteractions;
-
-        [Range(0, 10)]
-        public int activationTagCount = 1;
-
-        [Range(0, 10)]
-        public int deactivateTagCount;
-
-        public List<string> interactionTags = new() { "Player" };
-
-        [HideInInspector]
-        public List<PFEventReactor> activationReactors;
-
-        [HideInInspector]
-        public List<PFEventReactor> deactivationReactors;
-
-        public bool mouseClickDebug;
-        private bool hasFired;
-        private bool mouseState;
-
-        private bool state;
-
-        protected List<string> tagsActive = new();
-
-        private void OnMouseDown()
+        if (mouseClickDebug)
         {
-            if (mouseClickDebug)
+            mouseState = !mouseState;
+            if (mouseState)
             {
-                mouseState = !mouseState;
-                if (mouseState)
-                {
-                    Debug.Log("Debug Activate Event");
-                    SendSignal(null, true);
-                }
-                else
-                {
-                    DebugActivate();
-                }
-            }
-        }
-
-        protected void SendSignal(Component component, bool ingress)
-        {
-            if (!interactionTags.Contains(component.tag))
-                return;
-
-            if (ingress)
-            {
-                if (component != null)
-                {
-                    tagsActive.Add(component.tag);
-                    if (tagsActive.Count < activationTagCount)
-                        return;
-                }
-
-                if (triggerInteractions == TriggerInteractions.DeactivationOnly)
-                    return;
+                Debug.Log("Debug Activate Event");
+                SendSignal(null, true);
             }
             else
             {
-                if (component != null)
-                {
-                    tagsActive.Remove(component.tag);
-                    if (tagsActive.Count > deactivateTagCount)
-                        return;
-                }
-
-                if (triggerInteractions == TriggerInteractions.ActivationOnly)
-                    return;
+                DebugActivate();
             }
-
-            if (triggerType == TriggerType.Latching)
-            {
-                if (hasFired) return;
-                hasFired = true;
-            }
-
-            SetNextState(ingress);
-
-            if (state && triggerInteractions != TriggerInteractions.DeactivationOnly)
-                parentController.SendSignal(this, true);
-
-            if (state == false && triggerInteractions != TriggerInteractions.ActivationOnly)
-                parentController.SendSignal(this, false);
-        }
-
-        protected void SetNextState(bool ingress)
-        {
-            if (triggerType == TriggerType.Toggle)
-                state = !state;
-            else
-                state = triggerMode == TriggerMode.Normal ? ingress : !ingress;
-        }
-
-        public void DebugActivate()
-        {
-            Debug.Log("Debug Activate Event");
-            SendSignal(null, true);
-        }
-
-        public void DebugDeactivate()
-        {
-            Debug.Log("Debug Deactivate Event");
-            SendSignal(null, false);
         }
     }
+
+    protected void SendSignal(Component component, bool isActive)
+    {
+        if (!interactionTags.Contains(component.tag))
+            return;
+
+        if (isActive)
+            HandleTriggerInteractions(component, activationTagCount, TriggerInteractions.DeactivationOnly);
+        else
+            HandleTriggerInteractions(component, deactivateTagCount, TriggerInteractions.ActivationOnly);
+
+        if (triggerType == TriggerType.Latching && hasFired) return;
+        hasFired = true;
+
+        SetNextState(isActive);
+
+        if (state && triggerInteractions != TriggerInteractions.DeactivationOnly)
+            parentController.SendSignal(this, true);
+
+        if (!state && triggerInteractions != TriggerInteractions.ActivationOnly)
+            parentController.SendSignal(this, false);
+    }
+
+    protected void HandleTriggerInteractions(Component component, int tagCount, TriggerInteractions interactions)
+    {
+        if (component != null)
+        {
+            tagsActive.Add(component.tag);
+            if (tagsActive.Count < tagCount)
+                return;
+        }
+
+        if (triggerInteractions == interactions)
+            return;
+    }
+
+    protected void SetNextState(bool isActive)
+    {
+        state = triggerType == TriggerType.Toggle 
+            ? !state 
+            : triggerMode == TriggerMode.Normal ? isActive : !isActive;
+    }
+
+    public void DebugActivate()
+    {
+        Debug.Log("Debug Activate Event");
+        SendSignal(null, true);
+    }
+
+    public void DebugDeactivate()
+    {
+        Debug.Log("Debug Deactivate Event");
+        SendSignal(null, false);
+    }
+}
 }

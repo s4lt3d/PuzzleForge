@@ -3,10 +3,15 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
+    /// <summary>
+    /// This class is a controller for a room, it is responsible for managing signals and reactors
+    /// It is also responsible for sending signals to reactors when they are triggered
+    /// </summary>
     public class PFRoomController : PFBase
     {
+
         [HideInInspector]
-        public List<PFSignalBase> signals = new();
+        public List<PFSignalBase> signals = new(); 
 
         [HideInInspector]
         public List<PFReactorBase> reactors = new();
@@ -25,11 +30,15 @@ namespace PuzzleForge
                 if (hookupEntry.signal == sender)
                 {
                     foreach (var reactor in hookupEntry.reactors) reactor.React(ingress, sender);
-                    break; // Assuming only one entry per sender, we break after finding and processing it
+                    break; 
                 }
         }
 
 
+        /// <summary>
+        /// Registers a signal with the room controller
+        /// </summary>
+        /// <param name="signal"></param>
         public void RegisterSignal(PFSignalBase signal)
         {
             if (signals.Contains(signal))
@@ -37,6 +46,10 @@ namespace PuzzleForge
             signals.Add(signal);
         }
 
+        /// <summary>
+        /// Removes a signal from the room controller
+        /// </summary>
+        /// <param name="signal"></param>
         public void RemoveSignal(PFSignalBase signal)
         {
             if (signals.Contains(signal))
