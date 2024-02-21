@@ -62,7 +62,8 @@ namespace PuzzleForge
 
     protected void SendSignal(Component component, bool isActive)
     {
-        if (!interactionTags.Contains(component.tag))
+        // Included objectTags in the check
+        if (!interactionTags.Contains(component.tag) && !objectTags.Contains(component.tag)) 
             return;
 
         if (isActive)
@@ -76,10 +77,10 @@ namespace PuzzleForge
         SetNextState(isActive);
 
         if (state && triggerInteractions != TriggerInteractions.DeactivationOnly)
-            parentController.SendSignal(this, true);
+            parentController.DispatchSignal(this, true);
 
         if (!state && triggerInteractions != TriggerInteractions.ActivationOnly)
-            parentController.SendSignal(this, false);
+            parentController.DispatchSignal(this, false);
     }
 
     protected void HandleTriggerInteractions(Component component, int tagCount, TriggerInteractions interactions)

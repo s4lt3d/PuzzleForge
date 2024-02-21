@@ -22,7 +22,7 @@ namespace PuzzleForge
         [HideInInspector]
         public List<PFActivationHookupEntry> deactivationHookups = new();
 
-        public void SendSignal(PFSignalBase sender, bool ingress)
+        public void DispatchSignal(PFSignalBase sender, bool ingress)
         {
             var hookups = ingress ? activationHookups : deactivationHookups;
 
@@ -32,6 +32,11 @@ namespace PuzzleForge
                     foreach (var reactor in hookupEntry.reactors) reactor.React(ingress, sender);
                     break; 
                 }
+        }
+        
+        public void RouteSignal(PFSignalBase sender, PFReactorBase reactor, bool ingress)
+        {
+            reactor.React(ingress, sender);
         }
 
 
