@@ -36,7 +36,7 @@ namespace PuzzleForge
 
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
+           // DrawDefaultInspector();
 
             switchRoomController = (PFRoomController)target;
             activators           = switchRoomController.signals;
@@ -117,19 +117,21 @@ namespace PuzzleForge
 
         private void DrawToggleMatrix()
         {
+            
             var clickableLabelStyle = new GUIStyle(GUI.skin.label)
             {
                 normal = { textColor = Color.cyan }
             };
 
-            var r = GUILayoutUtility.GetRect(80 + longestReactorName + activators.Count * 15 + toggleSize,
-                55 + reactors.Count * 30);
+            var r = GUILayoutUtility.GetRect(activators.Count * 15 + toggleSize,
+                150);
 
             GUIUtility.RotateAroundPivot(-90, new Vector2(r.x + longestReactorName, r.y));
+            EditorGUILayout.LabelField("Activators", EditorStyles.boldLabel);
             for (var i = 0; i < activators.Count; i++)
             {
                 var activatorLabelContent = new GUIContent(activators[i].name);
-                var labelSize             = clickableLabelStyle.CalcSize(activatorLabelContent);
+                var labelSize= clickableLabelStyle.CalcSize(activatorLabelContent);
 
                 if (GUI.Button(new Rect(r.x, r.y + i * 15 + 3, labelSize.x, labelSize.y), activatorLabelContent,
                         clickableLabelStyle))
