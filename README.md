@@ -35,7 +35,9 @@ To get started with Puzzle Forge, follow these steps:
 
 4. **Testing**: Enter Play mode in Unity to test the interactions you've set up. Adjust configurations as needed to achieve the desired behavior.
 
-## Examples - Coming Soon
+## Coming Soon
+
+ - **Event Driven Architecture**: Will be changing the architecture to EDA to help support larger amounts of interactions
 
 
 ---
