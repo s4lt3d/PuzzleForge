@@ -9,7 +9,7 @@ namespace PuzzleForge
     {
         [Min(0)]
         public float ActivationDelay;
-
+ 
         [Min(0)]
         public float DeactivationDelay;
 
@@ -54,6 +54,11 @@ namespace PuzzleForge
 
             SetNextState(ingress);
 
+            HandleState(state);
+        }
+
+        protected override void HandleState(bool state)
+        {
             if (state)
                 StartCoroutine(ActivateCR());
             else

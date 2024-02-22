@@ -20,5 +20,6 @@ namespace PuzzleForge
         public ReactorMode reactorMode;
 
         public abstract void React(bool ingressState, PFSignalBase activator);
+        protected abstract void HandleState(bool state);
     }
 }
