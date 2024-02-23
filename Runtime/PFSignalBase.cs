@@ -55,8 +55,7 @@ namespace PuzzleForge
             {
                 mouseState = !mouseState;
                 if (mouseState)
-                {
-                    Debug.Log("Debug Activate Event");
+                { 
                     SendSignal(null, true);
                 }
                 else
