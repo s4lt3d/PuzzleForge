@@ -10,7 +10,7 @@ namespace PuzzleForge
         private readonly int longestReactorName = 150;
 
         private readonly int toggleSize = 15;
-        private List<PFSignalBase> activators;
+        private List<PFSignalEvent> activators;
         private bool[,] disableFieldsArray = new bool[4, 4];
 
         private bool[,] enableFieldsArray = new bool[4, 4];

@@ -14,12 +14,15 @@ namespace PuzzleForge
         Inverted
     }
 
+    /// <summary>
+    /// The base class for all puzzle forge reactors.
+    /// </summary>
     public abstract class PFReactorBase : PFBase
     {
         public ReactorType reactorType;
         public ReactorMode reactorMode;
 
-        public abstract void React(bool ingressState, PFSignalBase activator);
+        public abstract void React(bool ingressState, PFSignalEvent activator);
         protected abstract void HandleState(bool state);
     }
 }

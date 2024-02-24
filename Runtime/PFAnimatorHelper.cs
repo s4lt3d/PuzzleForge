@@ -2,43 +2,68 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum AnimatorParameterTypes
+namespace PuzzleForge
 {
-    Bool,
-    Float,
-    Int,
-    Trigger
-}
-
-[Serializable] // This makes AnimatorParameters visible in the Inspector
-public class PFAnimatorParameters
-{
-    public string eventName;
-    public AnimatorParameterTypes parameterType;
-    public string animatorParameterName;
-    public bool boolValue;
-    public int intValue;
-    public float floatValue;
-}
-
-/// <summary>
-///     Helps set animator functions with multiple parameters from unity events in the inspector without code.
-/// </summary>
-public class PFAnimatorHelper : MonoBehaviour
-{
-    public List<PFAnimatorParameters> parameters;
-
-    protected Animator animator;
-
-    private void Awake()
+    public enum AnimatorParameterTypes
     {
-        animator = GetComponent<Animator>();
-        InitializeAnimatorParameters();
+        Bool,
+        Float,
+        Int,
+        Trigger
     }
 
-    private void InitializeAnimatorParameters()
+    [Serializable] // This makes AnimatorParameters visible in the Inspector
+    public class PFAnimatorParameters
     {
-        foreach (var param in parameters)
+        public string eventName;
+        public AnimatorParameterTypes parameterType;
+        public string animatorParameterName;
+        public bool boolValue;
+        public int intValue;
+        public float floatValue;
+    }
+
+    /// <summary>
+    ///     Helps set animator functions with multiple parameters from unity events in the inspector without code.
+    /// </summary>
+    public class PFAnimatorHelper : MonoBehaviour
+    {
+        public List<PFAnimatorParameters> parameters;
+
+        protected Animator animator;
+
+        private void Awake()
+        {
+            animator = GetComponent<Animator>();
+            InitializeAnimatorParameters();
+        }
+
+        private void InitializeAnimatorParameters()
+        {
+            foreach (var param in parameters)
+                switch (param.parameterType)
+                {
+                    case AnimatorParameterTypes.Float:
+                        SetFloat(param.animatorParameterName, param.floatValue);
+                        break;
+                    case AnimatorParameterTypes.Int:
+                        SetInt(param.animatorParameterName, param.intValue);
+                        break;
+                    case AnimatorParameterTypes.Bool:
+                        SetBool(param.animatorParameterName, param.boolValue);
+                        break;
+                    case AnimatorParameterTypes.Trigger:
+
+                        break;
+                }
+        }
+
+        public void SetAnimatorParameter(string eventName)
+        {
+            var param = parameters.Find(p => p.eventName == eventName);
+            if (param == null)
+                return;
+
             switch (param.parameterType)
             {
                 case AnimatorParameterTypes.Float:
@@ -51,51 +76,29 @@ public class PFAnimatorHelper : MonoBehaviour
                     SetBool(param.animatorParameterName, param.boolValue);
                     break;
                 case AnimatorParameterTypes.Trigger:
-
+                    SetTrigger(param.animatorParameterName);
                     break;
             }
-    }
-
-    public void SetAnimatorParameter(string eventName)
-    {
-        var param = parameters.Find(p => p.eventName == eventName);
-        if (param == null)
-            return;
-
-        switch (param.parameterType)
-        {
-            case AnimatorParameterTypes.Float:
-                SetFloat(param.animatorParameterName, param.floatValue);
-                break;
-            case AnimatorParameterTypes.Int:
-                SetInt(param.animatorParameterName, param.intValue);
-                break;
-            case AnimatorParameterTypes.Bool:
-                SetBool(param.animatorParameterName, param.boolValue);
-                break;
-            case AnimatorParameterTypes.Trigger:
-                SetTrigger(param.animatorParameterName);
-                break;
         }
-    }
 
-    private void SetFloat(string parameterName, float value)
-    {
-        if (animator != null) animator.SetFloat(parameterName, value);
-    }
+        private void SetFloat(string parameterName, float value)
+        {
+            if (animator != null) animator.SetFloat(parameterName, value);
+        }
 
-    private void SetInt(string parameterName, int value)
-    {
-        if (animator != null) animator.SetInteger(parameterName, value);
-    }
+        private void SetInt(string parameterName, int value)
+        {
+            if (animator != null) animator.SetInteger(parameterName, value);
+        }
 
-    private void SetBool(string parameterName, bool value)
-    {
-        if (animator != null) animator.SetBool(parameterName, value);
-    }
+        private void SetBool(string parameterName, bool value)
+        {
+            if (animator != null) animator.SetBool(parameterName, value);
+        }
 
-    private void SetTrigger(string parameterName)
-    {
-        if (animator != null) animator.SetTrigger(parameterName);
+        private void SetTrigger(string parameterName)
+        {
+            if (animator != null) animator.SetTrigger(parameterName);
+        }
     }
 }

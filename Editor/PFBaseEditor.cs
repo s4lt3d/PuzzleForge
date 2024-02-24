@@ -8,7 +8,7 @@ namespace PuzzleForge
     {
         public void OnSceneGUI()
         {
-            var signalBase = (PFSignalBase)target;
+            var signalBase = (PFSignalEvent)target;
             var controller = signalBase.parentController;
             if (controller == null)
                 return;

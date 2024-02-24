@@ -5,6 +5,9 @@ using UnityEngine.Events;
 
 namespace PuzzleForge
 {
+    /// <summary>
+    /// The PFEventReactor class is a puzzle forge reactor that reacts to events based on specific conditions.
+    /// </summary>
     public class PFEventReactor : PFReactorBase
     {
         [Min(0)]
@@ -30,9 +33,9 @@ namespace PuzzleForge
 
         private bool state;
 
-        public HashSet<PFSignalBase> activationCount = new HashSet<PFSignalBase>();
+        public HashSet<PFSignalEvent> activationCount = new HashSet<PFSignalEvent>();
 
-        public override void React(bool ingress, PFSignalBase activator)
+        public override void React(bool ingress, PFSignalEvent activator)
         {
             if(activator != null)
                 if (ingress)

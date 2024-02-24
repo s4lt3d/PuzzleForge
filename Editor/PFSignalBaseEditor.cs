@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
-    [CustomEditor(typeof(PFSignalBase), true)]
+    [CustomEditor(typeof(PFSignalEvent), true)]
     public class PFSignalBaseEditor : Editor
     {
         public void OnSceneGUI()
         {
-            var signalBase = (PFSignalBase)target;
+            var signalBase = (PFSignalEvent)target;
             var controller = signalBase.parentController;
             if (controller == null)
                 return;
@@ -36,7 +36,7 @@ namespace PuzzleForge
 
         public override void OnInspectorGUI()
         {
-            var signalBase = (PFSignalBase)target;
+            var signalBase = (PFSignalEvent)target;
 
             signalBase.parentController?.RegisterSignal(signalBase);
 

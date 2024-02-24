@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
+    /// <summary>
+    ///     Represents the type of trigger event.
+    /// </summary>
     public enum TriggerType
     {
         Simple,
@@ -10,12 +13,18 @@ namespace PuzzleForge
         Toggle
     }
 
+    /// <summary>
+    ///     Enum representing the trigger mode.
+    /// </summary>
     public enum TriggerMode
     {
         Normal,
         Inverted
     }
 
+    /// <summary>
+    ///     Enumeration of trigger interaction options.
+    /// </summary>
     public enum TriggerInteractions
     {
         ActivationAndDeactivation,
@@ -23,12 +32,17 @@ namespace PuzzleForge
         DeactivationOnly
     }
 
-    public class PFSignalBase : PFBase
+    /// <summary>
+    ///     Represents a signal event in the PuzzleForge game.
+    /// </summary>
+    public class PFSignalEvent : PFBase
     {
         public TriggerType triggerType;
+        
         public TriggerMode triggerMode;
+        
         public TriggerInteractions triggerInteractions;
-
+        
         [Range(0, 10)]
         public int activationTagCount = 1;
 
@@ -43,28 +57,18 @@ namespace PuzzleForge
         [HideInInspector]
         public List<PFEventReactor> deactivationReactors;
 
-        public bool mouseClickDebug;
         private bool hasFired;
-        private bool mouseState;
+
         private bool state;
+        
         protected List<string> tagsActive = new();
 
-        private void OnMouseDown()
-        {
-            if (mouseClickDebug)
-            {
-                mouseState = !mouseState;
-                if (mouseState)
-                { 
-                    SendSignal(null, true);
-                }
-                else
-                {
-                    DebugActivate();
-                }
-            }
-        }
 
+        /// <summary>
+        ///     Sends a signal to activate or deactivate the component based on the given parameters.
+        /// </summary>
+        /// <param name="component">The component to send the signal to.</param>
+        /// <param name="isActive">A boolean value indicating whether to activate or deactivate the component.</param>
         protected void SendSignal(Component component, bool isActive)
         {
             var pfBaseComponent = component.GetComponent<PFBase>();
@@ -90,6 +94,12 @@ namespace PuzzleForge
                 parentController.DispatchSignal(this, false);
         }
 
+        /// <summary>
+        ///     Handles the trigger interactions of a component.
+        /// </summary>
+        /// <param name="component">The component being triggered.</param>
+        /// <param name="tagCount">The number of tags required for the interaction to take place.</param>
+        /// <param name="interactions">Specifies the type of interactions to be handled.</param>
         protected void HandleTriggerInteractions(Component component, int tagCount, TriggerInteractions interactions)
         {
             if (component != null)
@@ -103,6 +113,10 @@ namespace PuzzleForge
                 return;
         }
 
+        /// <summary>
+        ///     Sets the next state of the PFSignalEvent.
+        /// </summary>
+        /// <param name="isActive">Indicates whether the event is active or not.</param>
         protected void SetNextState(bool isActive)
         {
             state = triggerType == TriggerType.Toggle
@@ -110,18 +124,6 @@ namespace PuzzleForge
                 : triggerMode == TriggerMode.Normal
                     ? isActive
                     : !isActive;
-        }
-
-        public void DebugActivate()
-        {
-            Debug.Log("Debug Activate Event");
-            SendSignal(null, true);
-        }
-
-        public void DebugDeactivate()
-        {
-            Debug.Log("Debug Deactivate Event");
-            SendSignal(null, false);
         }
     }
 }
