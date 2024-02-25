@@ -10,7 +10,7 @@ namespace PuzzleForge
     [Serializable]
     public class PFActivationHookupEntry
     {
-        public PFSignalEvent signal;
+        public PFSignalEventBase signal;
         public List<PFReactorBase> reactors = new();
     }
 }

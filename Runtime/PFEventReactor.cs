@@ -33,9 +33,9 @@ namespace PuzzleForge
 
         private bool state;
 
-        public HashSet<PFSignalEvent> activationCount = new HashSet<PFSignalEvent>();
+        public HashSet<PFSignalEventBase> activationCount = new HashSet<PFSignalEventBase>();
 
-        public override void React(bool ingress, PFSignalEvent activator)
+        public override void React(bool ingress, PFSignalEventBase activator)
         {
             if(activator != null)
                 if (ingress)

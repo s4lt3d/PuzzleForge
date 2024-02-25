@@ -10,7 +10,7 @@ namespace PuzzleForge
     public class PFRoomController : PFBase
     {
         [HideInInspector]
-        public List<PFSignalEvent> signals = new();
+        public List<PFSignalEventBase> signals = new();
 
         [HideInInspector]
         public List<PFReactorBase> reactors = new();
@@ -26,7 +26,7 @@ namespace PuzzleForge
         /// </summary>
         /// <param name="sender">The signal that triggered the dispatch.</param>
         /// <param name="ingress">True if the signal is an ingress signal, false if it is a egress signal.</param>
-        public void DispatchSignal(PFSignalEvent sender, bool ingress)
+        public void DispatchSignal(PFSignalEventBase sender, bool ingress)
         {
             var hookups = ingress ? activationHookups : deactivationHookups;
 
@@ -44,7 +44,7 @@ namespace PuzzleForge
         /// <param name="sender">The signal sending the message.</param>
         /// <param name="reactor">The reactor to receive the signal.</param>
         /// <param name="ingress">Indicates if the signal is an ingress signal.</param>
-        public void RouteSignal(PFSignalEvent sender, PFReactorBase reactor, bool ingress)
+        public void RouteSignal(PFSignalEventBase sender, PFReactorBase reactor, bool ingress)
         {
             reactor.React(ingress, sender);
         }
@@ -54,7 +54,7 @@ namespace PuzzleForge
         /// Registers a signal in the room controller's list of registered signals.
         /// </summary>
         /// <param name="signal">The signal to register.</param>
-        public void RegisterSignal(PFSignalEvent signal)
+        public void RegisterSignal(PFSignalEventBase signal)
         {
             if (signals.Contains(signal))
                 return;
@@ -66,7 +66,7 @@ namespace PuzzleForge
         /// Removes a signal from the room controller's list of registered signals.
         /// </summary>
         /// <param name="signal">The signal to be removed.</param>
-        public void RemoveSignal(PFSignalEvent signal)
+        public void RemoveSignal(PFSignalEventBase signal)
         {
             if (signals.Contains(signal))
                 signals.Remove(signal);

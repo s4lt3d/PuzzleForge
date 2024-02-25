@@ -5,7 +5,7 @@ namespace PuzzleForge
     /// <summary>
     /// PFTriggerSignal class for handling trigger signals.
     /// </summary>
-    public class PFTriggerSignal : PFSignalEvent
+    public class PFTriggerSignal : PFSignalEventBase
     {
         /// <summary>
         /// Called when a Rigidbody or a Collider enters the trigger.

@@ -22,7 +22,7 @@ namespace PuzzleForge
         public ReactorType reactorType;
         public ReactorMode reactorMode;
 
-        public abstract void React(bool ingressState, PFSignalEvent activator);
+        public abstract void React(bool ingressState, PFSignalEventBase activator);
         protected abstract void HandleState(bool state);
     }
 }

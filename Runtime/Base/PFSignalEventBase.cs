@@ -35,7 +35,7 @@ namespace PuzzleForge
     /// <summary>
     ///     Represents a signal event in the PuzzleForge game.
     /// </summary>
-    public class PFSignalEvent : PFBase
+    public class PFSignalEventBase : PFBase
     {
         public TriggerType triggerType;
         
