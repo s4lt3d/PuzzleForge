@@ -16,6 +16,8 @@ namespace PuzzleForge
         public List<PFActivationHookupEntry> OnActivationDeactivateHookups = new();
         public List<PFActivationHookupEntry> OnDeactivationActivateHookups = new();
         public List<PFActivationHookupEntry> OnDeactivationDeactivateHookups = new();
+        public List<PFActivationHookupEntry> OnActivationResetHookups = new();
+        public List<PFActivationHookupEntry> OnDeactivationResetHookups = new();
 
         /// <summary>
         /// Dispatches a signal to the appropriate reactors based on the sender and ingress value.
@@ -41,6 +43,18 @@ namespace PuzzleForge
                     foreach (var reactor in hookupEntry.reactors) reactor.React(!ingress, sender);
                     break; 
                 }
+            
+            
+            hookups = ingress ? OnActivationResetHookups : OnDeactivationResetHookups;
+
+            foreach (var hookupEntry in hookups)
+                if (hookupEntry.signal == sender)
+                {
+                    foreach (var reactor in hookupEntry.reactors) reactor.Reset();
+                    break; 
+                }
+            
+            
         }
 
         /// <summary>

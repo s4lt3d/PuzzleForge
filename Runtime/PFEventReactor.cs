@@ -28,6 +28,9 @@ namespace PuzzleForge
 
         [SerializeField]
         private UnityEvent onDeactivated;
+        
+        [SerializeField]
+        private UnityEvent onReset;
 
         private bool hasFired;
 
@@ -90,6 +93,15 @@ namespace PuzzleForge
                 yield return new WaitForSeconds(DeactivationDelay);
 
             onDeactivated.Invoke();
+        }
+        
+        public override void Reset()
+        {
+            hasFired = false;
+            state = false;
+            activationCount.Clear();
+            HandleState(state);
+            onReset.Invoke();
         }
     }
 }

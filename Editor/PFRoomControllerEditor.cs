@@ -15,6 +15,8 @@ namespace PuzzleForge
         private bool[,] activationActivateHookupsFieldsArray = new bool[4, 4];
         private bool[,] deactivationActivateHookupsFieldsArray = new bool[4, 4];
         private bool[,] activationDeactivateHookupsFieldsArray = new bool[4, 4];
+        private bool[,] activationResetHookupsFieldsArray = new bool[4, 4];
+        private bool[,] deactivationResetHookupsFieldsArray = new bool[4, 4];
 
         private List<PFReactorBase> reactors;
 
@@ -47,6 +49,18 @@ namespace PuzzleForge
                         0.7f);
                 }
             }
+            
+            foreach(var hookup in switchRoomController.OnActivationResetHookups)
+            {
+                if (hookup == null) continue;
+
+                foreach (var reactor in hookup.reactors)
+                {
+                    if (hookup.signal == null || reactor == null) continue;
+                    EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
+                        0.7f);
+                }
+            }
         }
 
         public override void OnInspectorGUI()
@@ -67,6 +81,8 @@ namespace PuzzleForge
             deactivationDeactivateHookupsFieldsArray = new bool[reactors.Count, activators.Count];
             activationDeactivateHookupsFieldsArray = new bool[reactors.Count, activators.Count];
             deactivationActivateHookupsFieldsArray = new bool[reactors.Count, activators.Count];
+            activationResetHookupsFieldsArray = new bool[reactors.Count, activators.Count];
+            deactivationResetHookupsFieldsArray = new bool[reactors.Count, activators.Count];
 
             InitializeToggleStates();
 
@@ -80,6 +96,8 @@ namespace PuzzleForge
                 switchRoomController.OnDeactivationDeactivateHookups.Clear();
                 switchRoomController.OnActivationDeactivateHookups.Clear();
                 switchRoomController.OnDeactivationActivateHookups.Clear();
+                switchRoomController.OnActivationResetHookups.Clear();
+                switchRoomController.OnDeactivationResetHookups.Clear();
 
                 for (var activatorIndex = 0; activatorIndex < activators.Count; activatorIndex++)
                 {
@@ -91,6 +109,11 @@ namespace PuzzleForge
                         { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
                     var OnDeactivationActivateEntry = new PFActivationHookupEntry
                         { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
+                    var OnActivationResetEntry = new PFActivationHookupEntry
+                        { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
+                    var OnDeactivationResetEntry = new PFActivationHookupEntry
+                        { signal = activators[activatorIndex], reactors = new List<PFReactorBase>() };
+                    
 
                     for (var reactorIndex = 0; reactorIndex < reactors.Count; reactorIndex++)
                     {
@@ -106,6 +129,11 @@ namespace PuzzleForge
                         if (deactivationActivateHookupsFieldsArray[reactorIndex, activatorIndex])
                             OnDeactivationActivateEntry.reactors.Add(reactors[reactorIndex]);
                         
+                        if (activationResetHookupsFieldsArray[reactorIndex, activatorIndex])
+                            OnActivationResetEntry.reactors.Add(reactors[reactorIndex]);
+                        
+                        if (deactivationResetHookupsFieldsArray[reactorIndex, activatorIndex])
+                            OnDeactivationResetEntry.reactors.Add(reactors[reactorIndex]);
                     }
 
                     if (onActivationActivateEntry.reactors.Count > 0) 
@@ -119,6 +147,12 @@ namespace PuzzleForge
                     
                     if(OnDeactivationActivateEntry.reactors.Count > 0)
                         switchRoomController.OnDeactivationActivateHookups.Add(OnDeactivationActivateEntry);
+                    
+                    if(OnActivationResetEntry.reactors.Count > 0)
+                        switchRoomController.OnActivationResetHookups.Add(OnActivationResetEntry);
+                    
+                    if(OnDeactivationResetEntry.reactors.Count > 0)
+                        switchRoomController.OnDeactivationResetHookups.Add(OnDeactivationResetEntry);
                 }
 
                 EditorUtility.SetDirty(target);
@@ -134,6 +168,8 @@ namespace PuzzleForge
                     deactivationDeactivateHookupsFieldsArray[j, i] = false;
                     deactivationActivateHookupsFieldsArray[j, i] = false;
                     activationDeactivateHookupsFieldsArray[j, i] = false;
+                    activationResetHookupsFieldsArray[j, i] = false;
+                    deactivationResetHookupsFieldsArray[j, i] = false;
                 }
 
             foreach (var entry in switchRoomController.OnActivationActivateHookups)
@@ -177,6 +213,28 @@ namespace PuzzleForge
                     {
                         var reactorIndex = reactors.IndexOf(reactor);
                         if (reactorIndex != -1) activationDeactivateHookupsFieldsArray[reactorIndex, activatorIndex] = true;
+                    }
+            }
+            
+            foreach (var entry in switchRoomController.OnActivationResetHookups)
+            {
+                var activatorIndex = activators.IndexOf(entry.signal);
+                if (activatorIndex != -1)
+                    foreach (var reactor in entry.reactors)
+                    {
+                        var reactorIndex = reactors.IndexOf(reactor);
+                        if (reactorIndex != -1) activationResetHookupsFieldsArray[reactorIndex, activatorIndex] = true;
+                    }
+            }
+            
+            foreach (var entry in switchRoomController.OnDeactivationResetHookups)
+            {
+                var activatorIndex = activators.IndexOf(entry.signal);
+                if (activatorIndex != -1)
+                    foreach (var reactor in entry.reactors)
+                    {
+                        var reactorIndex = reactors.IndexOf(reactor);
+                        if (reactorIndex != -1) deactivationResetHookupsFieldsArray[reactorIndex, activatorIndex] = true;
                     }
             }
             
@@ -224,6 +282,14 @@ namespace PuzzleForge
             EditorGUILayout.Space();
             EditorGUILayout.LabelField("On Deactivation Activate Signal Subscribers", EditorStyles.boldLabel);
             DrawReactorToggles(deactivationActivateHookupsFieldsArray, " ");
+            
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("On Activation Reset Signal Subscribers", EditorStyles.boldLabel);
+            DrawReactorToggles(activationResetHookupsFieldsArray, " ");
+            
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("On Deactivation Reset Signal Subscribers", EditorStyles.boldLabel);
+            DrawReactorToggles(deactivationResetHookupsFieldsArray, " ");
         }
 
         private void DrawReactorToggles(bool[,] fieldsArray, string labelPrefix)

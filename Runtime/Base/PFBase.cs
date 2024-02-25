@@ -33,5 +33,10 @@ namespace PuzzleForge
         {
             return objectTags.Contains(tag);
         }
+
+        public virtual void Reset()
+        {
+            // empty
+        }
     }
 }

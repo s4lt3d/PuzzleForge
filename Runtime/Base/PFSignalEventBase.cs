@@ -125,5 +125,13 @@ namespace PuzzleForge
                     ? isActive
                     : !isActive;
         }
+        
+        
+        public override void Reset()
+        {
+            hasFired = false;
+            state = false;
+            SetNextState(false);
+        }
     }
 }
