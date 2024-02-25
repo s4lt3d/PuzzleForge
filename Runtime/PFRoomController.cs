@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PuzzleForge
 {
@@ -9,17 +10,12 @@ namespace PuzzleForge
     /// </summary>
     public class PFRoomController : PFBase
     {
-        [HideInInspector]
         public List<PFSignalEventBase> signals = new();
-
-        [HideInInspector]
         public List<PFReactorBase> reactors = new();
-
-        [HideInInspector]
-        public List<PFActivationHookupEntry> activationHookups = new();
-
-        [HideInInspector]
-        public List<PFActivationHookupEntry> deactivationHookups = new();
+        public List<PFActivationHookupEntry> OnActivationActivateHookups = new();
+        public List<PFActivationHookupEntry> OnActivationDeactivateHookups = new();
+        public List<PFActivationHookupEntry> OnDeactivationActivateHookups = new();
+        public List<PFActivationHookupEntry> OnDeactivationDeactivateHookups = new();
 
         /// <summary>
         /// Dispatches a signal to the appropriate reactors based on the sender and ingress value.
@@ -28,12 +24,21 @@ namespace PuzzleForge
         /// <param name="ingress">True if the signal is an ingress signal, false if it is a egress signal.</param>
         public void DispatchSignal(PFSignalEventBase sender, bool ingress)
         {
-            var hookups = ingress ? activationHookups : deactivationHookups;
+            var hookups = ingress ? OnActivationActivateHookups : OnDeactivationDeactivateHookups;
 
             foreach (var hookupEntry in hookups)
                 if (hookupEntry.signal == sender)
                 {
                     foreach (var reactor in hookupEntry.reactors) reactor.React(ingress, sender);
+                    break; 
+                }
+
+            hookups = !ingress ? OnActivationDeactivateHookups : OnDeactivationActivateHookups;
+
+            foreach (var hookupEntry in hookups)
+                if (hookupEntry.signal == sender)
+                {
+                    foreach (var reactor in hookupEntry.reactors) reactor.React(!ingress, sender);
                     break; 
                 }
         }
@@ -83,6 +88,7 @@ namespace PuzzleForge
             if (reactors.Contains(reactor))
                 return;
             reactors.Add(reactor);
+            reactors.Sort();
         }
 
         /// <summary>

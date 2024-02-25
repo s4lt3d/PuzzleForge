@@ -12,7 +12,7 @@ namespace PuzzleForge
             var controller = signalBase.parentController;
             if (controller == null)
                 return;
-            foreach (var hookup in controller.activationHookups)
+            foreach (var hookup in controller.OnActivationActivateHookups)
             {
                 if(hookup.signal == null) continue;
                 foreach (var reactor in hookup.reactors)
@@ -22,7 +22,7 @@ namespace PuzzleForge
                         0.7f);
                 }
             }
-            foreach (var hookup in controller.deactivationHookups)
+            foreach (var hookup in controller.OnDeactivationDeactivateHookups)
             {
                 if(hookup.signal == null) continue;
                 foreach (var reactor in hookup.reactors)
