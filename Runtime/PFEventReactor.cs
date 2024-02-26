@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,6 +42,8 @@ namespace PuzzleForge
 
         public override void React(bool ingress, PFSignalEventBase activator)
         {
+            if (!enabled)
+                return;
             if(activator != null)
                 if (ingress)
                     activationCount.Add(activator);
@@ -102,11 +105,20 @@ namespace PuzzleForge
         
         public override void Reset()
         {
+            if (!enabled)
+                return;
             hasFired = false;
             state = false;
             activationCount.Clear();
             HandleState(state);
-            onReset.Invoke();
+            try
+            {
+                onReset.Invoke();
+            }
+            catch (Exception e)
+            {
+                Debug.LogError(e);
+            }
         }
     }
 }

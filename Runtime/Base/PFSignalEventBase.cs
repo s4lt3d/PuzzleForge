@@ -71,6 +71,9 @@ namespace PuzzleForge
         /// <param name="isActive">A boolean value indicating whether to activate or deactivate the component.</param>
         protected void SendSignal(Component component, bool isActive)
         {
+            if(!enabled)
+                return;
+            
             var pfBaseComponent = component.GetComponent<PFBase>();
             var componentTag = component.tag;
 
@@ -129,6 +132,8 @@ namespace PuzzleForge
         
         public override void Reset()
         {
+            if(!enabled)
+                return; 
             hasFired = false;
             state = false;
             tagsActive.Clear();
