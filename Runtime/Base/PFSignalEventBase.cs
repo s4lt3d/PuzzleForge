@@ -131,7 +131,7 @@ namespace PuzzleForge
         {
             hasFired = false;
             state = false;
-            SetNextState(false);
+            tagsActive.Clear();
         }
     }
 }

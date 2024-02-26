@@ -35,6 +35,7 @@ namespace PuzzleForge
         private bool hasFired;
 
         private bool state;
+        private bool prevState;
 
         public HashSet<PFSignalEventBase> activationCount = new HashSet<PFSignalEventBase>();
 
@@ -65,6 +66,10 @@ namespace PuzzleForge
 
         protected override void HandleState(bool state)
         {
+            if(prevState == state)
+                return;
+            prevState = state;
+            
             if (state)
                 StartCoroutine(ActivateCR());
             else
