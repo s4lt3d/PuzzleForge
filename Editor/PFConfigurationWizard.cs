@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 
 namespace PuzzleForge
 {
-    public class ConfigurationWizard : EditorWindow
+    public class PuzzleForgeMultiObjectEditor : EditorWindow
     {
         private readonly int toggleSize = 15;
         private readonly int longestReactorName = 150;
@@ -32,7 +34,7 @@ namespace PuzzleForge
         [MenuItem("Window/Puzzle Forge Configuration Wizard")]
         static void Init()
         {
-            ConfigurationWizard window = (ConfigurationWizard)EditorWindow.GetWindow(typeof(ConfigurationWizard));
+            PuzzleForgeMultiObjectEditor window = (PuzzleForgeMultiObjectEditor)EditorWindow.GetWindow(typeof(PuzzleForgeMultiObjectEditor));
             window.Show();
 
             HashSet<PFSignalEventBase> activators = new HashSet<PFSignalEventBase>();
@@ -231,6 +233,17 @@ namespace PuzzleForge
                     PopulateHookups(activators[i].OnActivationResetHookups, activationResetHookupsFieldsArray, i);
                     PopulateHookups(activators[i].OnDeactivationResetHookups, deactivationResetHookupsFieldsArray, i);
                 }
+
+                foreach (var obj in Selection.objects)
+                {
+                    if(obj.GetComponent<PFSignalEventBase>())
+                        EditorUtility.SetDirty(obj.GetComponent<PFSignalEventBase>());
+                    if(obj.GetComponent<PFReactorBase>())
+                        EditorUtility.SetDirty(obj.GetComponent<PFReactorBase>());
+                }
+
+                EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
+                AssetDatabase.SaveAssets();
             }
         }
 
