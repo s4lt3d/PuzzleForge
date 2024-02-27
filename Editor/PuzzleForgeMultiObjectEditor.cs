@@ -29,7 +29,11 @@ namespace PuzzleForge
         
         private Vector2 scrollPosition; // For tracking the scroll position
 
-        
+        public static void ShowWindow()
+        {
+            // Show existing window instance. If one doesn't exist, make one.
+            GetWindow(typeof(PuzzleForgeMultiObjectEditor), false);
+        }
         
         [MenuItem("Window/Puzzle Forge Configuration Wizard")]
         static void Init()
@@ -222,6 +226,11 @@ namespace PuzzleForge
             shouldApply = GUILayout.Button("Apply Configuration");
                 
             DrawToggleMatrix();
+            ApplyChanges(shouldApply);
+        }
+
+        private void ApplyChanges(bool shouldApply)
+        {
             if (shouldApply)
             {
                 for(int i = 0; i < activators.Count; i++)
@@ -257,11 +266,9 @@ namespace PuzzleForge
 
         void OnSelectionChange() 
         {
-            if (Selection.objects.Length >= 1)
-            {
-                Init();
-                
-            }
+
+            Init();
+
             Repaint();
         }
     }

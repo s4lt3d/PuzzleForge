@@ -8,8 +8,6 @@ namespace PuzzleForge
     /// </summary>
     public abstract class PFBase : MonoBehaviour
     {
-       // public PFRoomController parentController;
-        
         protected List<string> objectTags = new List<string>();
 
         public List<string> ObjectTags

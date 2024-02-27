@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PuzzleForge
 {
-    public static class EditorHelper
+    public static class EditorUtils
     {
         public static void DrawCurve(Vector3 pos1, Vector3 pos2, Color color, float curveRatio, int width = 1)
         {

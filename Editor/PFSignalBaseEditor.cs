@@ -14,7 +14,7 @@ namespace PuzzleForge
 
             foreach (var reactor in reactors)
             {
-                EditorHelper.DrawCurve(signal.transform.position, reactor.transform.position, Color.red,
+                EditorUtils.DrawCurve(signal.transform.position, reactor.transform.position, Color.red,
                     0.7f);
             }
         }
