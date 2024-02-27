@@ -21,6 +21,13 @@ namespace PuzzleForge
         private List<PFReactorBase> reactors;
 
         private PFRoomController switchRoomController;
+        
+        bool showGroup1 = false;
+        bool showGroup2 = false;
+        bool showGroup3 = false;
+        bool showGroup4 = false;
+        bool showGroup5 = false;
+        bool showGroup6 = false;
 
         public void OnSceneGUI()
         {
@@ -65,7 +72,7 @@ namespace PuzzleForge
 
         public override void OnInspectorGUI()
         {
-             DrawDefaultInspector();
+         //    DrawDefaultInspector();
 
             switchRoomController = (PFRoomController)target;
             
@@ -268,28 +275,33 @@ namespace PuzzleForge
             GUIUtility.RotateAroundPivot(90, new Vector2(r.x + longestReactorName, r.y));
 
             EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Activation Activate Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(activationActivateHookupsFieldsArray, " ");
 
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Deactivation Deactivate Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(deactivationDeactivateHookupsFieldsArray, " ");
             
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Activation Deactivate Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(activationDeactivateHookupsFieldsArray, " ");
+                
+            showGroup1 = EditorGUILayout.Foldout(showGroup1, "On Activation Activate Signal Subscribers");
+            if(showGroup1)
+                DrawReactorToggles(activationActivateHookupsFieldsArray, " ");
+
+            showGroup2 = EditorGUILayout.Foldout(showGroup2, "On Deactivation Deactivate Signal Subscribers");
+            if(showGroup2)
+                DrawReactorToggles(deactivationDeactivateHookupsFieldsArray, " ");
             
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Deactivation Activate Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(deactivationActivateHookupsFieldsArray, " ");
+            showGroup3 = EditorGUILayout.Foldout(showGroup3, "On Activation Deactivate Signal Subscribers");
+            if(showGroup3)
+                DrawReactorToggles(activationDeactivateHookupsFieldsArray, " ");
             
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Activation Reset Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(activationResetHookupsFieldsArray, " ");
+            showGroup4 = EditorGUILayout.Foldout(showGroup4, "On Deactivation Activate Signal Subscribers");
+
+            if(showGroup4)
+                DrawReactorToggles(deactivationActivateHookupsFieldsArray, " ");
             
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("On Deactivation Reset Signal Subscribers", EditorStyles.boldLabel);
-            DrawReactorToggles(deactivationResetHookupsFieldsArray, " ");
+            showGroup5 = EditorGUILayout.Foldout(showGroup5, "On Activation Reset Signal Subscribers");
+            if(showGroup5)
+                DrawReactorToggles(activationResetHookupsFieldsArray, " ");
+            
+            showGroup6 = EditorGUILayout.Foldout(showGroup6, "On Deactivation Reset Signal Subscribers");
+            if(showGroup6)
+                DrawReactorToggles(deactivationResetHookupsFieldsArray, " ");
         }
 
         private void DrawReactorToggles(bool[,] fieldsArray, string labelPrefix)
