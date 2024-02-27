@@ -5,7 +5,6 @@ namespace PuzzleForge
 {
 #if UNITY_EDITOR
 
-
     [CustomEditor(typeof(PFSimpleMover))]
     public class PFSimpleMoverEditor : Editor
     {
