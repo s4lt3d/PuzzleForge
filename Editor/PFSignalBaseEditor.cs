@@ -8,39 +8,15 @@ namespace PuzzleForge
     {
         public void OnSceneGUI()
         {
-            var signalBase = (PFSignalEventBase)target;
-            var controller = signalBase.parentController;
-            if (controller == null)
-                return;
-            foreach (var hookup in controller.OnActivationActivateHookups)
+            var signal = (PFSignalEventBase)target;
+
+            var reactors = signal.GetAllReactors();
+
+            foreach (var reactor in reactors)
             {
-                if(hookup.signal == null) continue;
-                foreach (var reactor in hookup.reactors)
-                {
-                    if(reactor == null) continue;
-                    EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
-                        0.7f);
-                }
+                EditorHelper.DrawCurve(signal.transform.position, reactor.transform.position, Color.red,
+                    0.7f);
             }
-            foreach (var hookup in controller.OnDeactivationDeactivateHookups)
-            {
-                if(hookup.signal == null) continue;
-                foreach (var reactor in hookup.reactors)
-                {
-                    if(reactor == null) continue;
-                    EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
-                        0.7f);
-                }
-            }
-        }
-
-        public override void OnInspectorGUI()
-        {
-            var signalBase = (PFSignalEventBase)target;
-
-            signalBase.parentController?.RegisterSignal(signalBase);
-
-            DrawDefaultInspector();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace PuzzleForge
@@ -6,41 +7,30 @@ namespace PuzzleForge
     [CustomEditor(typeof(PFReactorBase), true)]
     public class PFReactorBaseEditor : Editor
     {
+        private HashSet<PFSignalEventBase> activators = new HashSet<PFSignalEventBase>();
+        
         public void OnSceneGUI()
         {
-            var signalBase = (PFReactorBase)target;
-            var controller = signalBase.parentController;
-            if (controller == null)
-                return;
-            foreach (var hookup in controller.OnActivationActivateHookups)
+            PFSignalEventBase[] allSignalEvents = FindObjectsOfType<PFSignalEventBase>();
+            
+            var reactor = (PFReactorBase)target;
+            if(reactor == null) return;
+
+            foreach (var signal in allSignalEvents)
             {
-                if(hookup.signal == null) continue;
-                foreach (var reactor in hookup.reactors)
+                if(signal == null) continue;
+                
+                if (signal.Contains(reactor))
                 {
-                    if(reactor == null) continue;
-                    EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
-                        0.7f);
+                    activators.Add(signal);
                 }
             }
-            foreach (var hookup in controller.OnDeactivationDeactivateHookups)
+
+            foreach (var signal in activators)
             {
-                if(hookup.signal == null) continue;
-                foreach (var reactor in hookup.reactors)
-                {
-                    if(reactor == null) continue;
-                    EditorHelper.DrawCurve(hookup.signal.transform.position, reactor.transform.position, Color.red,
-                        0.7f);
-                }
+                EditorHelper.DrawCurve(signal.transform.position, reactor.transform.position, Color.red,
+                    0.7f);
             }
-        }
-
-        public override void OnInspectorGUI()
-        {
-            var reactorBase = (PFReactorBase)target;
-
-            reactorBase?.parentController?.RegisterReactor(reactorBase);
-
-            DrawDefaultInspector();
         }
     }
 }

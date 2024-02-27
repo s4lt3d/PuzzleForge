@@ -8,9 +8,15 @@ namespace PuzzleForge
     /// </summary>
     public abstract class PFBase : MonoBehaviour
     {
-        public PFRoomController parentController;
+       // public PFRoomController parentController;
         
-        public List<string> objectTags = new List<string>();
+        protected List<string> objectTags = new List<string>();
+
+        public List<string> ObjectTags
+        {
+            get => objectTags;
+            set => objectTags = value;
+        }
 
         /// <summary>
         /// Adds a tag to the list of object tags.
@@ -18,9 +24,9 @@ namespace PuzzleForge
         /// <param name="tag">The tag to add.</param>
         public void AddTag(string tag)
         {
-            if (!objectTags.Contains(tag))
+            if (!ObjectTags.Contains(tag))
             {
-                objectTags.Add(tag);
+                ObjectTags.Add(tag);
             }
         }
 
@@ -31,7 +37,7 @@ namespace PuzzleForge
         /// <returns>True if the object has the tag, false otherwise.</returns>
         public bool HasTag(string tag)
         {
-            return objectTags.Contains(tag);
+            return ObjectTags.Contains(tag);
         }
 
         public virtual void Reset()

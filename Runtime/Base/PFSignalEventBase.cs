@@ -37,6 +37,8 @@ namespace PuzzleForge
     /// </summary>
     public class PFSignalEventBase : PFBase
     {
+        public List<string> interactionTags = new() { "Player" };
+        
         public TriggerType triggerType;
         
         public TriggerMode triggerMode;
@@ -49,7 +51,7 @@ namespace PuzzleForge
         [Range(0, 10)]
         public int deactivateTagCount;
 
-        public List<string> interactionTags = new() { "Player" };
+
 
         [HideInInspector]
         public List<PFEventReactor> activationReactors;
@@ -62,6 +64,13 @@ namespace PuzzleForge
         private bool state;
         
         protected List<string> tagsActive = new();
+        
+        public List<PFReactorBase> OnActivationActivateHookups = new();
+        public List<PFReactorBase> OnActivationDeactivateHookups = new();
+        public List<PFReactorBase> OnActivationResetHookups = new();
+        public List<PFReactorBase> OnDeactivationActivateHookups = new();
+        public List<PFReactorBase> OnDeactivationDeactivateHookups = new();
+        public List<PFReactorBase> OnDeactivationResetHookups = new();
 
 
         /// <summary>
@@ -77,7 +86,7 @@ namespace PuzzleForge
             var pfBaseComponent = component.GetComponent<PFBase>();
             var componentTag = component.tag;
 
-            if (!(interactionTags.Contains(componentTag) || pfBaseComponent.objectTags.Contains(componentTag)))
+            if (!(interactionTags.Contains(componentTag) || pfBaseComponent.ObjectTags.Contains(componentTag)))
                 return;
 
             if (isActive)
@@ -91,10 +100,26 @@ namespace PuzzleForge
             SetNextState(isActive);
 
             if (state && triggerInteractions != TriggerInteractions.DeactivationOnly)
-                parentController.DispatchSignal(this, true);
+                DispatchSignal(true);
 
             if (!state && triggerInteractions != TriggerInteractions.ActivationOnly)
-                parentController.DispatchSignal(this, false);
+                DispatchSignal(false);
+        }
+
+        private void DispatchSignal(bool ingress)
+        {
+            var hookups = ingress ? OnActivationActivateHookups : OnDeactivationDeactivateHookups;
+            foreach (var reactor in hookups)
+                reactor.React(ingress, this);
+
+            hookups = !ingress ? OnActivationDeactivateHookups : OnDeactivationActivateHookups;
+            foreach (var reactor in hookups)
+                reactor.React(ingress, this);
+            
+            
+            hookups = ingress ? OnActivationResetHookups : OnDeactivationResetHookups;
+            foreach (var reactor in hookups)
+                reactor.Reset();
         }
 
         /// <summary>
@@ -137,6 +162,29 @@ namespace PuzzleForge
             hasFired = false;
             state = false;
             tagsActive.Clear();
+        }
+
+        public bool Contains(PFReactorBase reactor)
+        {
+            if(OnActivationActivateHookups.Contains(reactor)) return true;
+            if(OnActivationDeactivateHookups.Contains(reactor)) return true;
+            if(OnActivationResetHookups.Contains(reactor)) return true;
+            if(OnDeactivationActivateHookups.Contains(reactor)) return true;
+            if(OnDeactivationDeactivateHookups.Contains(reactor)) return true;
+            if(OnDeactivationResetHookups.Contains(reactor)) return true;
+            return false;
+        }
+        
+        public List<PFReactorBase> GetAllReactors()
+        {
+            var list = new List<PFReactorBase>();
+            list.AddRange(OnActivationActivateHookups);
+            list.AddRange(OnActivationDeactivateHookups);
+            list.AddRange(OnActivationResetHookups);
+            list.AddRange(OnDeactivationActivateHookups);
+            list.AddRange(OnDeactivationDeactivateHookups);
+            list.AddRange(OnDeactivationResetHookups);
+            return list;
         }
     }
 }
