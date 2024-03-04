@@ -13,7 +13,7 @@ namespace PuzzleForge
         /// <param name="other">The other Collider involved in this collision.</param>
         private void OnTriggerEnter(Collider other)
         {
-            SendSignal(other, true);
+            SendSignal(other, triggerMode==TriggerMode.Normal);
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace PuzzleForge
         /// <param name="other">The collider that entered the trigger.</param>
         private void OnTriggerEnter2D(Collider2D other)
         {
-            SendSignal(other, true);
+            SendSignal(other, triggerMode==TriggerMode.Normal);
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace PuzzleForge
         {
             if (triggerType == TriggerType.Toggle)
                 return;
-            SendSignal(other, false);
+            SendSignal(other, triggerMode!=TriggerMode.Normal);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace PuzzleForge
         {
             if (triggerType == TriggerType.Toggle)
                 return;
-            SendSignal(other, false);
+            SendSignal(other, triggerMode==TriggerMode.Normal);
         }
     }
 }

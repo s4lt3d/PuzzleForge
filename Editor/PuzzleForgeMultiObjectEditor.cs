@@ -20,7 +20,7 @@ namespace PuzzleForge
         private bool[,] activationDeactivateHookupsFieldsArray = new bool[4, 4];
         private bool[,] activationResetHookupsFieldsArray = new bool[4, 4];
         private bool[,] deactivationResetHookupsFieldsArray = new bool[4, 4];
-        bool showGroup1 = false;
+        bool showGroup1 = true;
         bool showGroup2 = false;
         bool showGroup3 = false;
         bool showGroup4 = false;
