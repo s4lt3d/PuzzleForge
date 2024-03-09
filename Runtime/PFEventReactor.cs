@@ -11,6 +11,8 @@ namespace PuzzleForge
     /// </summary>
     public class PFEventReactor : PFReactorBase
     {
+        public ReactorType reactorType;
+        
         [Min(0)]
         public float ActivationDelay;
  

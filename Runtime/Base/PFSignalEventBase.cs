@@ -35,14 +35,12 @@ namespace PuzzleForge
     /// <summary>
     ///     Represents a signal event in the PuzzleForge game.
     /// </summary>
-    public class PFSignalEventBase : PFBase
+    public class PFSignalEventBase : PFSignalBase
     {
         public List<string> interactionTags = new() { "Player" };
         
         public TriggerType triggerType;
-        
-        public TriggerMode triggerMode;
-        
+
         public TriggerInteractions triggerInteractions;
         
         [Range(0, 10)]

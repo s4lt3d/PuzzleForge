@@ -9,6 +9,7 @@ namespace PuzzleForge
     public abstract class PFBase : MonoBehaviour
     {
         protected List<string> objectTags = new List<string>();
+        
 
         public List<string> ObjectTags
         {

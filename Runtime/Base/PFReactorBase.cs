@@ -19,7 +19,7 @@ namespace PuzzleForge
     /// </summary>
     public class PFReactorBase : PFBase
     {
-        public ReactorType reactorType;
+
         public ReactorMode reactorMode;
 
         public virtual void React(bool ingressState, PFSignalEventBase activator)
