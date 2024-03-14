@@ -35,7 +35,7 @@ namespace PuzzleForge
             GetWindow(typeof(PuzzleForgeMultiObjectEditor), false);
         }
         
-        [MenuItem("Window/Puzzle Forge Configuration Wizard")]
+        [MenuItem("Tools/Puzzle Forge Configuration Wizard")]
         static void Init()
         {
             PuzzleForgeMultiObjectEditor window = (PuzzleForgeMultiObjectEditor)EditorWindow.GetWindow(typeof(PuzzleForgeMultiObjectEditor));
