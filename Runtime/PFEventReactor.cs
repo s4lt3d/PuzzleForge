@@ -94,7 +94,7 @@ namespace PuzzleForge
             if (ActivationDelay > 0)
                 yield return new WaitForSeconds(ActivationDelay);
 
-            onActivated.Invoke();
+            onActivated?.Invoke();
         }
 
         private IEnumerator DeactivateCR()
@@ -102,7 +102,7 @@ namespace PuzzleForge
             if (DeactivationDelay > 0)
                 yield return new WaitForSeconds(DeactivationDelay);
 
-            onDeactivated.Invoke();
+            onDeactivated?.Invoke();
         }
         
         public override void Reset()
@@ -115,7 +115,7 @@ namespace PuzzleForge
             HandleState(state);
             try
             {
-                onReset.Invoke();
+                onReset?.Invoke();
             }
             catch (Exception e)
             {

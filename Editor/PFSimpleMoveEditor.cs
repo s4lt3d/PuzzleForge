@@ -17,16 +17,23 @@ namespace PuzzleForge
             var myScript = (PFSimpleMover)target;
 
             // If we press this button, call CapturePosition on script
-            if(GUILayout.Button("Capture Position"))
+            if (GUILayout.Button("Capture Position"))
+            {
                 myScript.CapturePosition();
-        
+            }
+
             // If we press this button, it will instantly cycle to the next position
-            if(GUILayout.Button("Cycle to Next Position"))
-                myScript.CyclePosition();
-        
+            if (GUILayout.Button("Cycle to Next Position"))
+            {
+                myScript.CyclePosition(true);
+            }
+
             // If we press this button, call Reset on script
-            if(GUILayout.Button("Reset"))
-                myScript.Reset();
+            if (GUILayout.Button("Reset"))
+            {
+                myScript.Reset(true);
+                
+            }
         }
     }
 #endif
